@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>First Session Intake Form · Pierce St ICC</title>
+<link rel="stylesheet" href="assets/clinic.css">
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ HEADER ============ -->
+  <header class="doc">
+    <a class="backlink" href="index.html">← All forms</a>
+    <div class="eyebrow">Integral Counseling Center · Pierce Street</div>
+    <h1>First Session — Intake &amp; Notes</h1>
+    <div class="sub">2140 Pierce Street, San Francisco CA 94115 · 415-776-3109</div>
+    <div class="topgrid">
+      <div><label class="lab">Client Name</label><input type="text" class="sm" id="f_client" data-field placeholder="First Last"></div>
+      <div><label class="lab">Session Date</label><input type="date" class="sm" id="f_date" data-field data-default="today"></div>
+      <div><label class="lab">Therapist</label><input type="text" class="sm" id="f_therapist" data-field placeholder="Your name"></div>
+      <div><label class="lab">Semester Assigned</label><input type="text" class="sm" id="f_sem" data-field></div>
+      <div><label class="lab">Contact #</label><input type="text" class="sm" id="f_contact" data-field></div>
+      <div><label class="lab">Telehealth — client's current location</label><input type="text" class="sm" id="f_loc" data-field placeholder="Confirm where client is joining from"></div>
+    </div>
+  </header>
+
+  <!-- ============ STEP 1 — ADMIN ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">1</span><h2>Administrative — cover up front</h2></div>
+    <p class="lede">Walk through these before opening the intake conversation.</p>
+
+    <h3>Limits to Confidentiality</h3>
+    <div class="warn"><b>Read aloud / paraphrase:</b> Everything here is confidential, with a few exceptions. Confidentiality may be broken if:</div>
+    <ul class="admin">
+      <li>
+        <b>Confidentiality may be broken if…</b>
+        <ul>
+          <li>1) You authorize the release of information</li>
+          <li>2) Your therapist is ordered by a court to release information</li>
+          <li>3) You present a physical danger to yourself or others</li>
+          <li>4) Abuse of a child, dependent adult, or elder is suspected</li>
+          <li>5) The therapist learns of the downloading or accessing of child pornography</li>
+          <li>6) You have a medical emergency</li>
+          <li>7) You are trying to get insurance reimbursement</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="chk"><input type="checkbox" id="c_conf" data-field><label for="c_conf">Reviewed Limits to Confidentiality with client during intake</label></div>
+
+    <h3>Policies &amp; Logistics</h3>
+    <ul class="admin">
+      <li><b>Cancellation policy</b>
+        <ul>
+          <li>Appointments are weekly and 50 minutes.</li>
+          <li>Inform me of a cancellation at least 24 hours in advance; otherwise you will be charged for the session.</li>
+        </ul>
+      </li>
+      <li><b>Recording sessions</b>
+        <ul>
+          <li>For training purposes, on an external audio device; gets erased; confidential.</li>
+          <li class="prompt" style="margin:6px 0 0;">"Your meetings may be audio or video recorded for the purpose of supervision and/or training."</li>
+          <li class="prompt" style="margin:6px 0 0;">"I want to be clear about what the recordings are for: my supervisor is evaluating <i>me</i> — how I'm showing up and the way I'm being with you in session. They're not analyzing you or what you share. The focus is on my work as a therapist, not on your content."</li>
+        </ul>
+      </li>
+      <li><b>Timeline</b>
+        <ul>
+          <li>I will be at Pierce through <b>May 2027</b>.</li>
+          <li>After that, you'd have the option to come with me wherever I go next — but that's something we'd figure out together when the time comes.</li>
+        </ul>
+      </li>
+      <li><b>Billing</b>
+        <ul>
+          <li>Appears as <b>VTG*CIIS</b> on your statement.</li>
+          <li>Charged same or next day.</li>
+          <li>Contact me if you have any issues.</li>
+        </ul>
+      </li>
+      <li><b>Communication</b>
+        <ul><li>Text or call me on my confidential line. Email is fine too.</li></ul>
+      </li>
+      <li><b>Telehealth</b>
+        <ul><li>Confirm the location where the client is joining (noted in header above).</li></ul>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============ STEP 2 — SET THE FRAME ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">2</span><h2>Set the frame &amp; open the intake</h2></div>
+    <div class="prompt q">"We have 50 minutes and can start wherever you'd like — <i>and</i> we have an intake form we can start with if you prefer."</div>
+    <div class="prompt q">"There's no wrong place to begin. Some of what I'll ask is just the standard intake stuff, and some of it we'll let unfold naturally as we talk. If anything I ask feels like too much, you can always tell me to slow down or skip it."</div>
+    <div class="prompt q">Easing in: "Before we get into any of the forms — what made you decide to reach out for therapy right now?"</div>
+  </section>
+
+  <!-- ============ STEP 3 — INTAKE FORM ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">3</span><h2>Intake Form</h2></div>
+    <p class="lede">Fill in as the conversation unfolds — you don't need to go top to bottom.</p>
+
+    <h3>Contact Information</h3>
+    <div class="two">
+      <div class="field-block"><label class="lab">Name(s)</label><input type="text" class="sm" id="i_names" data-field></div>
+      <div class="field-block"><label class="lab">Date of Birth (mo/date/yr)</label><input type="text" class="sm" id="i_dob" data-field></div>
+      <div class="field-block"><label class="lab">Home Phone</label><input type="tel" class="sm" id="i_home" data-field></div>
+      <div class="field-block"><label class="lab">Work Phone</label><input type="tel" class="sm" id="i_work" data-field></div>
+      <div class="field-block"><label class="lab">Address</label><input type="text" class="sm" id="i_addr" data-field></div>
+      <div class="field-block"><label class="lab">Email Address</label><input type="email" class="sm" id="i_email" data-field></div>
+      <div class="field-block"><label class="lab">Messages okay?</label><input type="text" class="sm" id="i_msg" data-field></div>
+      <div class="field-block"><label class="lab">Age</label><input type="text" class="sm" id="i_age" data-field data-age-of="i_dob"></div>
+      <div class="field-block"><label class="lab">If minor — legal guardian/parent</label><input type="text" class="sm" id="i_guard" data-field></div>
+      <div class="field-block"><label class="lab">Referred By (be specific)</label><input type="text" class="sm" id="i_ref" data-field></div>
+      <div class="field-block"><label class="lab">Monthly household income (net, after taxes) $</label><input type="text" class="sm" id="i_income" data-field></div>
+      <div class="field-block"><label class="lab">Additional sources of support/income</label><input type="text" class="sm" id="i_income2" data-field></div>
+      <div class="field-block"><label class="lab">Number of Dependents</label><input type="text" class="sm" id="i_deps" data-field></div>
+    </div>
+
+    <h3>Presenting Concerns</h3>
+    <div class="field-block"><label class="lab">Client's reasons for seeking therapy</label>
+      <div class="prompt q">"What brings you in?" · "What's been going on that made now feel like the right time?" · "If we could focus on one thing together, what would feel most important to you?"</div>
+      <div class="prompt q">Following up gently: "Tell me more about that." · "What does that look like day to day for you?" · "How long has this been weighing on you?"</div>
+      <textarea class="lg" id="i_reasons" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Client's goals, hopes, expectations about therapy</label>
+      <div class="prompt q">"If our work together went really well, what would be different in your life?" · "What are you hoping therapy can help you with?" · "When you imagine feeling better, what does that look like?"</div>
+      <textarea class="lg" id="i_goals" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Client's concerns, fears, ambivalence about (beginning, being in) therapy</label>
+      <div class="prompt q">"How are you feeling about being here today?" · "A lot of people feel some nerves or mixed feelings about starting — is any of that here for you?" · "Is there anything you're worried about when it comes to therapy or working with me?"</div>
+      <textarea class="lg" id="i_concerns" data-field></textarea></div>
+
+    <h3>Therapy History</h3>
+    <small class="hint">Previous or concurrent therapy — when, length, issues, what the experience was like, what was most/least helpful, reasons for termination.</small>
+    <div class="prompt q">"Have you been in therapy before?" · If yes: "What was that experience like for you?" · "What worked well, and what didn't?" · "What would you want to be different this time?"</div>
+    <div class="field-block"><textarea class="lg" id="i_thxhist" data-field></textarea></div>
+
+    <h3>Psychiatric &amp; Psychological History</h3>
+    <div class="prompt q">Easing in: "I'm going to ask a few more clinical questions now — these are routine and I ask everyone. Just answer what feels comfortable."</div>
+    <div class="field-block"><label class="lab">Hospitalizations / psychotic behavior, etc.</label>
+      <div class="prompt q">"Have you ever been hospitalized for mental health reasons, or worked with a psychiatrist?" · "Has there ever been a time things felt really out of control or hard to manage?"</div>
+      <textarea class="lg" id="i_psychhist" data-field></textarea></div>
+    <div class="warn"><b>Safety:</b> If any current suicidal feelings, make sure client has the Suicide Prevention # <b>(415) 781-0500</b>.</div>
+    <div class="field-block"><label class="lab">Suicidal / homicidal / violent behavior</label>
+      <small class="hint">Ideation, attempts, fears — past or current. For violence, note whether client was victim or perpetrator.</small>
+      <div class="prompt q">Direct but warm: "Have you ever had thoughts of not wanting to be here, or of hurting yourself?" · "Are you having any of those thoughts now?" · If yes: "Do you have a plan? Have you acted on these thoughts before?"</div>
+      <div class="prompt q">"Have you ever had thoughts of hurting someone else?" · Stay calm and matter-of-fact — asking directly gives them permission to be honest.</div>
+      <textarea class="lg" id="i_risk" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Psychiatric medications</label>
+      <small class="hint">List medication, dosage; indicate if not prescribed or not being monitored.</small>
+      <div class="prompt q">"Are you taking any medications for your mental health right now?" · "Who prescribes those — a psychiatrist, your regular doctor?" · "How's that been working for you?"</div>
+      <textarea class="lg" id="i_meds" data-field></textarea></div>
+    <div class="two">
+      <div class="field-block"><label class="lab">Full name of Psychiatrist / MD prescribing meds</label><input type="text" class="sm" id="i_md" data-field></div>
+      <div class="field-block"><label class="lab">Phone Number</label><input type="tel" class="sm" id="i_mdphone" data-field></div>
+    </div>
+
+    <h3>Body Image / Disordered Eating</h3>
+    <small class="hint">Regular, overeating, compulsive, binge/purge, fasting (when, how often). Eating disorder history? Prior treatment / hospitalizations?</small>
+    <div class="prompt q">Open and non-judgmental: "How's your relationship with food and eating these days?" · "Is your relationship with food or your body something that's ever felt difficult?" · Follow up only as far as they're comfortable going.</div>
+    <div class="field-block"><textarea class="lg" id="i_eating" data-field></textarea></div>
+
+    <h3>Medical History</h3>
+    <small class="hint">Major illness, disabilities, hospitalizations, current medications (note date/age of significant occurrences).</small>
+    <div class="prompt q">"How's your physical health overall?" · "Any major illnesses, surgeries, or ongoing conditions I should know about?" · "Are you taking any medications for physical health?"</div>
+    <div class="field-block"><textarea class="lg" id="i_medical" data-field></textarea></div>
+
+    <h3>Substance Use / Abuse History</h3>
+    <div class="prompt q">Normalize it: "I ask everyone about substances — caffeine and nicotine all the way through alcohol and other drugs. There's no judgment here, it just helps me get the full picture."</div>
+    <div class="prompt q">"Do you drink coffee or use nicotine at all?" · "How about alcohol — do you drink? Roughly how often, and how much?" · "Any other substances, recreational or otherwise?"</div>
+    <div class="two">
+      <div class="field-block"><label class="lab">Nicotine — how often</label><input type="text" class="sm" id="i_nic" data-field></div>
+      <div class="field-block"><label class="lab">Nicotine — begin / end</label><input type="text" class="sm" id="i_nic2" data-field></div>
+      <div class="field-block"><label class="lab">Caffeine — how often</label><input type="text" class="sm" id="i_caf" data-field></div>
+      <div class="field-block"><label class="lab">Caffeine — begin / end</label><input type="text" class="sm" id="i_caf2" data-field></div>
+    </div>
+    <div class="field-block"><label class="lab">Alcohol — what / how much / how often / begin–end</label><textarea class="lg" id="i_alc" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Other drugs — what, how much, how often, how long</label><textarea class="lg" id="i_drugs" data-field></textarea></div>
+    <div class="prompt q">Explore the client's willingness to cut back on alcohol and other substances if use is more than occasional.</div>
+    <div class="field-block"><label class="lab">Notes on willingness to cut back</label><textarea class="sm" id="i_cutback" data-field></textarea></div>
+
+    <h3>Family History</h3>
+    <div class="prompt q">"What was it like in your family growing up? What did it look like? Feel like? What were your relationships with your family members like?"</div>
+    <div class="field-block"><textarea class="xl" id="i_family" data-field></textarea></div>
+
+    <h3>Identity</h3>
+    <div class="prompt q">"Is there anything about how you identify — culture, sexuality, gender, other parts of your background — that you'd like me to know about?"</div>
+    <div class="field-block"><textarea class="lg" id="i_identity" data-field></textarea></div>
+
+    <h3>Anything Else</h3>
+    <small class="hint">Anything else the client feels is important to them and would like you to know.</small>
+    <div class="prompt q">"Is there anything we haven't touched on that feels important for me to know?" · "Anything you walked in here hoping you'd get a chance to say?"</div>
+    <div class="field-block"><textarea class="lg" id="i_else" data-field></textarea></div>
+  </section>
+
+  <!-- ============ STEP 4 — ADDITIONAL DEPTH ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">4</span><h2>Additional Questions (as time / relevance allows)</h2></div>
+    <p class="lede">Follow the client's lead — these are doorways to open if it feels right, not a checklist to march through.</p>
+    <div class="field-block"><label class="lab">Stresses / coping skills</label>
+      <small class="hint">Other sources of stress (SES, food insufficiency, institutional racism, oppression, marginalization). How does the client cope? Support systems?</small>
+      <div class="prompt q">"What's life feeling like outside of what brought you in — work, money, housing, all of it?" · "When things get hard, what helps you get through?" · "Who do you have in your corner?"</div>
+      <textarea class="lg" id="a_stress" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Depression</label>
+      <small class="hint">Motivation, appetite, sleep disturbance (hours/night, insomnia, hypersomnia, disturbing dreams).</small>
+      <div class="prompt q">"How's your energy and motivation been lately?" · "How are you sleeping — and eating?" · "How would you describe your mood most days?"</div>
+      <textarea class="lg" id="a_depr" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Relationship issues</label>
+      <small class="hint">Family history, messages/experiences growing up, substance use by family members.</small>
+      <div class="prompt q">"What did you learn about relationships growing up?" · "Were there messages in your family about how to be, or how to handle feelings?" · "Was substance use part of the picture at home?"</div>
+      <textarea class="lg" id="a_rel" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Abuse issues</label>
+      <small class="hint">Abuse of client (emotional, physical, sexual, psychological) — if client wants to talk about it: when did it occur, begin, end, etc.?</small>
+      <div class="prompt q">Gentle, never pushed: "Have you ever experienced anything — emotional, physical, sexual — that felt harmful or unsafe?" · "We don't have to go into it today; I just want to know it's part of your story." · Let them set the pace.</div>
+      <textarea class="lg" id="a_abuse" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Interpersonal relationships</label>
+      <small class="hint">Social/support systems, communication issues, current romantic/intimate relationship(s). Is current sexual life/expression satisfactory — if not, what would they like different? History of intimate relationships. Sexual expression if important to client (heterosexual, bisexual, gay/lesbian, queer, celibate, asexual, questioning). History / possible trauma around coming out, social support/community.</small>
+      <div class="prompt q">"Are you in a relationship right now? What's that like?" · "How connected do you feel to the people around you?" · "Is your intimate or sexual life somewhere you'd want anything to be different?" · Mirror the client's own language for their identity and relationships.</div>
+      <textarea class="xl" id="a_interp" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Gender expression</label>
+      <small class="hint">Transgender, gender non-conforming, intersex, genderqueer, two spirit, etc. History / possible trauma around coming out, social support/community.</small>
+      <div class="prompt q">"Is gender something that feels important to how you understand yourself?" · "How do you like to be referred to — name, pronouns?" · "Has finding support around that been easy or hard for you?"</div>
+      <textarea class="lg" id="a_gender" data-field></textarea></div>
+  </section>
+
+  <!-- ============ STEP 5 — THERAPIST ASSESSMENT ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">5</span><h2>Therapist's Assessment of Client</h2></div>
+    <small class="hint">Appearance and behavior, affect, mood, thought content, general impression.</small>
+    <div class="field-block"><textarea class="xl" id="t_assess" data-field></textarea></div>
+
+    <h3>Intake Therapist — complete in full</h3>
+    <div class="two">
+      <div class="field-block"><label class="lab">If continuing at ICC — regular appointment day &amp; time</label><input type="text" class="sm" id="t_appt" data-field></div>
+      <div class="field-block"><label class="lab">Regular ongoing fee $</label><input type="text" class="sm" id="t_fee" data-field></div>
+      <div class="field-block"><label class="lab">Date(s) of intake</label><input type="text" class="sm" id="t_idate" data-field></div>
+      <div class="field-block"><label class="lab">Full name of intake therapist (print)</label><input type="text" class="sm" id="t_tname" data-field></div>
+      <div class="field-block full"><label class="lab">Signature of intake therapist</label><input type="text" class="sm" id="t_sig" data-field></div>
+    </div>
+    <div class="chk"><input type="checkbox" id="t_intakeonly" data-field><label for="t_intakeonly">Intake only</label></div>
+    <div class="field-block"><label class="lab">If "intake only," please explain</label><textarea class="sm" id="t_intakeexp" data-field></textarea></div>
+    <div class="field-block"><label class="lab">If referred out — outside agency/therapist &amp; reason referred</label><textarea class="lg" id="t_referout" data-field></textarea></div>
+  </section>
+
+  <!-- ============ STEP 6 — ENDING & IDENTITY ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">6</span><h2>Ending the first session</h2></div>
+    <ul class="admin">
+      <li><b>Continuation</b>
+        <ul><li>Explain that I'll be meeting with the Clinic Director to get an OK to continue working together.</li></ul>
+      </li>
+      <li><b>Confirm scheduling</b>
+        <ul><li>Confirm the meeting time works for weekly sessions.</li></ul>
+      </li>
+      <li><b>Identity (if client requested a specific identity on the IC that you don't have)</b>
+        <ul><li>Address during the first session.</li></ul>
+        <div class="prompt q" style="margin:6px 0 0;">"Are you open to talking about how I am not X, which I know you requested?"</div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============ STEP 7 — PROGRESS NOTE & TO-DO ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">7</span><h2>First Progress Note &amp; follow-up</h2></div>
+    <h3>First Progress Note includes</h3>
+    <div class="chk"><input type="checkbox" id="p1" data-field><label for="p1">Sent the GFE (Good Faith Estimate) to the client.</label></div>
+    <div class="chk"><input type="checkbox" id="p2" data-field><label for="p2">Reviewed consent documents and clinic policies.</label></div>
+    <div class="chk"><input type="checkbox" id="p3" data-field><label for="p3">Assessed for substance misuse, psychological history, and suicidality.</label></div>
+
+    <h3>To do after</h3>
+    <div class="chk"><input type="checkbox" id="d1" data-field><label for="d1">Email/text the Clinic Director to "check in" about the case, with a few potential times to talk.</label></div>
+    <div class="chk"><input type="checkbox" id="d2" data-field><label for="d2">Upload "Intake Questionnaire" to the "General Documents" tab on Ensora (by 4th meeting).</label></div>
+
+    <div class="field-block" style="margin-top:14px;"><label class="lab">Additional notes / next steps</label><textarea class="lg" id="p_notes" data-field></textarea></div>
+  </section>
+
+</div>
+
+<!-- ============ ACTION BAR ============ -->
+<div class="bar">
+  <span class="status" id="status">Auto-saving on this device</span>
+  <span class="folder">Save folder: <span id="folderLabel">not set — PDF will download</span></span>
+  <button class="btn-folder" id="folderBtn" type="button">Set folder…</button>
+  <button class="btn-clear" id="clearBtn" type="button">Clear</button>
+  <button class="btn-pdf" id="pdfBtn" type="button">Save as PDF</button>
+</div>
+
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="assets/pdf.js"></script>
+<script src="data/intake-schema.js"></script>
+<script src="assets/forms.js"></script>
+</body>
+</html>

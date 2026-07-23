@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Couple Intake Form · Pierce St ICC</title>
+<link rel="stylesheet" href="assets/clinic.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="doc">
+    <a class="backlink" href="index.html">← All forms</a>
+    <div class="eyebrow">Integral Counseling Center · Pierce Street</div>
+    <h1>Couple Intake Information</h1>
+    <div class="sub">2140 Pierce Street, San Francisco CA 94115 · 415-776-3109</div>
+    <div class="topgrid">
+      <div><label class="lab">Couple / case name (for file)</label><input type="text" class="sm" id="f_client" data-field placeholder="Partner A &amp; Partner B"></div>
+      <div><label class="lab">Date</label><input type="date" class="sm" id="f_date" data-field data-default="today"></div>
+      <div><label class="lab">Therapist</label><input type="text" class="sm" id="f_therapist" data-field placeholder="Your name"></div>
+      <div><label class="lab">Contact #</label><input type="text" class="sm" id="cp_contact" data-field></div>
+      <div><label class="lab">Semester Assigned</label><input type="text" class="sm" id="cp_sem" data-field></div>
+    </div>
+  </header>
+
+  <!-- PARTNERS -->
+  <section class="card">
+    <div class="step"><span class="stepnum">1</span><h2>Partners</h2></div>
+    <div class="two">
+      <div>
+        <h3 style="margin-top:0;">Partner A</h3>
+        <div class="field-block"><label class="lab">Name</label><input type="text" class="sm" id="a_name" data-field></div>
+        <div class="field-block"><label class="lab">Address</label><input type="text" class="sm" id="a_addr" data-field></div>
+        <div class="field-block"><label class="lab">Home Phone</label><input type="tel" class="sm" id="a_home" data-field></div>
+        <div class="field-block"><label class="lab">Work Phone</label><input type="tel" class="sm" id="a_work" data-field></div>
+        <div class="two">
+          <div class="field-block"><label class="lab">Date of Birth</label><input type="text" class="sm" id="a_dob" data-field placeholder="MM/DD/YYYY"></div>
+          <div class="field-block"><label class="lab">Age</label><input type="text" class="sm" id="a_age" data-field data-age-of="a_dob"></div>
+        </div>
+        <div class="field-block"><label class="lab">Occupation</label><input type="text" class="sm" id="a_occ" data-field></div>
+      </div>
+      <div>
+        <h3 style="margin-top:0;">Partner B</h3>
+        <div class="field-block"><label class="lab">Name</label><input type="text" class="sm" id="b_name" data-field></div>
+        <div class="field-block"><label class="lab">Address</label><input type="text" class="sm" id="b_addr" data-field></div>
+        <div class="field-block"><label class="lab">Home Phone</label><input type="tel" class="sm" id="b_home" data-field></div>
+        <div class="field-block"><label class="lab">Work Phone</label><input type="tel" class="sm" id="b_work" data-field></div>
+        <div class="two">
+          <div class="field-block"><label class="lab">Date of Birth</label><input type="text" class="sm" id="b_dob" data-field placeholder="MM/DD/YYYY"></div>
+          <div class="field-block"><label class="lab">Age</label><input type="text" class="sm" id="b_age" data-field data-age-of="b_dob"></div>
+        </div>
+        <div class="field-block"><label class="lab">Occupation</label><input type="text" class="sm" id="b_occ" data-field></div>
+      </div>
+    </div>
+    <div class="field-block"><label class="lab">Which telephone number(s) is it all right to leave messages?</label><input type="text" class="sm" id="cp_messages" data-field></div>
+    <div class="two">
+      <div class="field-block"><label class="lab">Combined monthly income (net, after taxes) $</label><input type="text" class="sm" id="cp_income" data-field></div>
+      <div class="field-block"><label class="lab">Number of Dependents</label><input type="text" class="sm" id="cp_deps" data-field></div>
+    </div>
+    <div class="field-block"><label class="lab">Other sources of income / support</label><input type="text" class="sm" id="cp_income2" data-field></div>
+    <div class="field-block"><label class="lab">Times available for sessions</label><input type="text" class="sm" id="cp_avail" data-field></div>
+    <div class="chk"><input type="checkbox" id="cp_conf" data-field><label for="cp_conf">Reviewed Limits to Confidentiality &amp; Mandated Reporting</label></div>
+  </section>
+
+  <!-- IPV SCREENING -->
+  <section class="card">
+    <div class="step"><span class="stepnum">2</span><h2>Intimate Partner Abuse Screening</h2></div>
+    <div class="field-block"><label class="lab">Is there now, or has there ever been, violence in this relationship?</label>
+      <div class="radiorow">
+        <label><input type="radio" name="q_ipv" value="No" data-field><span>No</span></label>
+        <label><input type="radio" name="q_ipv" value="Yes" data-field><span>Yes</span></label>
+      </div>
+      <div class="reveal" data-show-when="q_ipv:Yes" hidden>
+        <div class="warn"><b>Safety screen positive.</b> Note history and current level of violence. Consult your supervisor about whether conjoint therapy is appropriate and about safety planning.</div>
+        <label class="lab">Brief description of history and current level of violence</label>
+        <textarea class="lg" id="ipv_desc" data-field></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRESENTING -->
+  <section class="card">
+    <div class="step"><span class="stepnum">3</span><h2>Presenting &amp; Relationship</h2></div>
+    <div class="field-block"><label class="lab">Couples presenting issues (each partner's reasons for seeking therapy)</label><textarea class="lg" id="cp_presenting" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Each partner's hopes and fears about and for therapy</label><textarea class="lg" id="cp_hopes" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Strong points of the relationship (each partner specifies)</label><textarea class="lg" id="cp_strong" data-field></textarea></div>
+    <div class="field-block"><label class="lab">History of the relationship</label>
+      <small class="hint">Include whether married, living together, poly, and relationship choices (e.g. open relationship, etc.).</small>
+      <textarea class="lg" id="cp_history" data-field></textarea></div>
+  </section>
+
+  <!-- SUBSTANCE -->
+  <section class="card">
+    <div class="step"><span class="stepnum">4</span><h2>Substance Use / Abuse History</h2></div>
+    <small class="hint">What, when, how often, how long — be specific.</small>
+    <div class="two">
+      <div class="field-block"><label class="lab">Nicotine — how often</label><input type="text" class="sm" id="cp_nic" data-field></div>
+      <div class="field-block"><label class="lab">Nicotine — begin / end</label><input type="text" class="sm" id="cp_nic2" data-field></div>
+      <div class="field-block"><label class="lab">Caffeine — how often</label><input type="text" class="sm" id="cp_caf" data-field></div>
+      <div class="field-block"><label class="lab">Caffeine — begin / end</label><input type="text" class="sm" id="cp_caf2" data-field></div>
+      <div class="field-block"><label class="lab">Cannabis — how often</label><input type="text" class="sm" id="cp_can" data-field></div>
+      <div class="field-block"><label class="lab">Cannabis — begin / end</label><input type="text" class="sm" id="cp_can2" data-field></div>
+    </div>
+    <div class="three">
+      <div class="field-block"><label class="lab">Alcohol — what</label><input type="text" class="sm" id="cp_alc_what" data-field></div>
+      <div class="field-block"><label class="lab">Drinks per week</label><input type="text" class="sm" id="cp_alc_much" data-field></div>
+      <div class="field-block"><label class="lab">Begin / end</label><input type="text" class="sm" id="cp_alc_be" data-field></div>
+    </div>
+    <div class="field-block"><label class="lab">Other drugs (what, how much, how often, how long)</label><textarea class="lg" id="cp_drugs" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Client's self-report on substance use and interest in moderating if needed</label><textarea class="lg" id="cp_moderating" data-field></textarea></div>
+  </section>
+
+  <!-- PSYCH -->
+  <section class="card">
+    <div class="step"><span class="stepnum">5</span><h2>Psychological History</h2></div>
+    <div class="warn"><b>Safety:</b> If suicidal ideation is present, make sure the client has the Suicide Prevention # <b>(415) 781-0500</b> or <b>988</b>, and consult your supervisor.</div>
+    <div class="field-block"><label class="lab">Psychological history</label>
+      <small class="hint">Suicidal ideation, previous hospitalizations, previous couples or individual therapy — what the experience was like, what was most/least helpful, reasons for termination.</small>
+      <textarea class="xl" id="cp_psychhx" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Full name of individual therapist / psychiatrist(s)</label><input type="text" class="sm" id="cp_indtherapist" data-field></div>
+    <div class="field-block"><label class="lab">Psychiatric medications</label>
+      <small class="hint">List medication, dosage; indicate if not prescribed or being monitored.</small>
+      <textarea class="lg" id="cp_meds" data-field></textarea></div>
+    <div class="two">
+      <div class="field-block"><label class="lab">Full name of Psychiatrist / MD prescribing meds</label><input type="text" class="sm" id="cp_md" data-field></div>
+      <div class="field-block"><label class="lab">Phone Number</label><input type="tel" class="sm" id="cp_mdphone" data-field></div>
+    </div>
+    <div class="field-block"><label class="lab">Anything else either partner feels is important or helpful to know</label><textarea class="lg" id="cp_else" data-field></textarea></div>
+  </section>
+
+  <!-- ADDITIONAL AREAS -->
+  <section class="card">
+    <div class="step"><span class="stepnum">6</span><h2>Additional Areas (as relevant)</h2></div>
+    <h3>Family History</h3>
+    <div class="field-block"><label class="lab">Family of origin, history</label><textarea class="lg" id="cp_foo" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Substance use / abuse by family member(s) in FOO</label><textarea class="lg" id="cp_foo_substance" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Abuse of client or other family members in FOO (emotional, physical, sexual, psychological)</label><textarea class="lg" id="cp_foo_abuse" data-field></textarea></div>
+    <h3>Current Relationship Issues — level of satisfaction with…</h3>
+    <div class="field-block"><label class="lab">Social interactions with friends</label><textarea class="sm" id="cp_sat_social" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Communication with each other</label><textarea class="sm" id="cp_sat_comm" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Anger and disagreements (do they get out of control, physical, etc.)</label><textarea class="sm" id="cp_sat_anger" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Affectionate interactions with each other</label><textarea class="sm" id="cp_sat_affection" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Sexual interactions with each other</label><textarea class="sm" id="cp_sat_sex" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Trust</label><textarea class="sm" id="cp_sat_trust" data-field></textarea></div>
+  </section>
+
+  <!-- THERAPIST -->
+  <section class="card">
+    <div class="step"><span class="stepnum">7</span><h2>Therapist's Assessment &amp; Intake Section</h2></div>
+    <div class="field-block"><label class="lab">Therapist's assessment</label>
+      <small class="hint">Appearance and behavior, affect, mood, thought content, general impression.</small>
+      <textarea class="xl" id="cp_assess" data-field></textarea></div>
+    <h3>Intake Therapist — complete in full</h3>
+    <div class="two">
+      <div class="field-block"><label class="lab">If continuing at ICC — regular appointment time &amp; day</label><input type="text" class="sm" id="cp_appt" data-field></div>
+      <div class="field-block"><label class="lab">Regular ongoing fee $</label><input type="text" class="sm" id="cp_fee" data-field></div>
+      <div class="field-block"><label class="lab">Date(s) of intake</label><input type="text" class="sm" id="cp_idate" data-field></div>
+      <div class="field-block"><label class="lab">Full name of intake therapist (print)</label><input type="text" class="sm" id="cp_tname" data-field></div>
+      <div class="field-block full"><label class="lab">Signature of intake therapist</label><input type="text" class="sm" id="cp_sig" data-field></div>
+    </div>
+    <div class="chk"><input type="checkbox" id="cp_intakeonly" data-field><label for="cp_intakeonly">Intake only</label></div>
+    <div class="field-block"><label class="lab">If "intake only," please explain</label><textarea class="sm" id="cp_intakeexp" data-field></textarea></div>
+    <div class="field-block"><label class="lab">If referred out — outside agency/therapist &amp; reason referred</label><textarea class="lg" id="cp_referout" data-field></textarea></div>
+  </section>
+
+</div>
+
+<div class="bar">
+  <span class="status" id="status">Auto-saving on this device</span>
+  <span class="folder">Save folder: <span id="folderLabel">not set — PDF will download</span></span>
+  <button class="btn-folder" id="folderBtn" type="button">Set folder…</button>
+  <button class="btn-clear" id="clearBtn" type="button">Clear</button>
+  <button class="btn-pdf" id="pdfBtn" type="button">Save as PDF</button>
+</div>
+
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="assets/pdf.js"></script>
+<script src="data/couple-schema.js"></script>
+<script src="assets/forms.js"></script>
+</body>
+</html>

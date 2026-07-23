@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Family Intake Form · Pierce St ICC</title>
+<link rel="stylesheet" href="assets/clinic.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="doc">
+    <a class="backlink" href="index.html">← All forms</a>
+    <div class="eyebrow">Integral Counseling Center · Pierce Street</div>
+    <h1>Family Intake Information</h1>
+    <div class="sub">2140 Pierce Street, San Francisco CA 94115 · (415) 776-3109</div>
+    <div class="topgrid">
+      <div><label class="lab">Family / case name (for file)</label><input type="text" class="sm" id="f_client" data-field placeholder="e.g. The Rivera Family"></div>
+      <div><label class="lab">Date</label><input type="date" class="sm" id="f_date" data-field data-default="today"></div>
+      <div class="full"><label class="lab">Counselor</label><input type="text" class="sm" id="f_therapist" data-field placeholder="Your name"></div>
+    </div>
+  </header>
+
+  <!-- CAREGIVERS -->
+  <section class="card">
+    <div class="step"><span class="stepnum">1</span><h2>Caregivers &amp; Household</h2></div>
+    <div class="two">
+      <div>
+        <h3 style="margin-top:0;">Adult A</h3>
+        <div class="field-block"><label class="lab">Name</label><input type="text" class="sm" id="a_name" data-field></div>
+        <div class="field-block"><label class="lab">Address</label><input type="text" class="sm" id="a_addr" data-field></div>
+        <div class="field-block"><label class="lab">Home Phone</label><input type="tel" class="sm" id="a_home" data-field></div>
+        <div class="field-block"><label class="lab">Work Phone</label><input type="tel" class="sm" id="a_work" data-field></div>
+        <div class="field-block"><label class="lab">Age</label><input type="text" class="sm" id="a_age" data-field></div>
+      </div>
+      <div>
+        <h3 style="margin-top:0;">Adult B</h3>
+        <div class="field-block"><label class="lab">Name</label><input type="text" class="sm" id="b_name" data-field></div>
+        <div class="field-block"><label class="lab">Address</label><input type="text" class="sm" id="b_addr" data-field></div>
+        <div class="field-block"><label class="lab">Home Phone</label><input type="tel" class="sm" id="b_home" data-field></div>
+        <div class="field-block"><label class="lab">Work Phone</label><input type="tel" class="sm" id="b_work" data-field></div>
+        <div class="field-block"><label class="lab">Age</label><input type="text" class="sm" id="b_age" data-field></div>
+      </div>
+    </div>
+    <div class="field-block"><label class="lab">Child's name(s)</label><input type="text" class="sm" id="fm_children_names" data-field></div>
+    <div class="two">
+      <div class="field-block"><label class="lab">Combined monthly income (net, after taxes) $</label><input type="text" class="sm" id="fm_income" data-field></div>
+      <div class="field-block"><label class="lab">Number of Dependents</label><input type="text" class="sm" id="fm_deps" data-field></div>
+    </div>
+    <div class="field-block"><label class="lab">Times available for sessions</label><input type="text" class="sm" id="fm_avail" data-field></div>
+  </section>
+
+  <!-- PRESENTING / COMPOSITION -->
+  <section class="card">
+    <div class="step"><span class="stepnum">2</span><h2>Presenting &amp; Family Composition</h2></div>
+    <div class="field-block"><label class="lab">What brings you here (presenting issues) — from each family member's perspective</label><textarea class="lg" id="fm_presenting" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Family composition</label>
+      <small class="hint">How long together, married/committed, living together/separately. Is there a way you define your relationship you'd like us to know?</small>
+      <textarea class="lg" id="fm_composition" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Step or blended family? (explain)</label><textarea class="sm" id="fm_blended" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Children in family (name, gender, ages, do children live in the home?)</label><textarea class="lg" id="fm_children" data-field></textarea></div>
+  </section>
+
+  <!-- HISTORY / SUBSTANCE / PSYCH -->
+  <section class="card">
+    <div class="step"><span class="stepnum">3</span><h2>History</h2></div>
+    <div class="field-block"><label class="lab">History of the family's relationship</label>
+      <small class="hint">How have you gotten along historically? Problem areas historically, etc.</small>
+      <textarea class="lg" id="fm_history" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Substance use / abuse history (what, when, how often, how long)</label><textarea class="lg" id="fm_substance" data-field></textarea></div>
+    <div class="warn"><b>Safety:</b> If suicidal feelings are present, make sure the client has the Suicide Prevention # <b>(415) 781-0500</b> or <b>988</b>, and consult your supervisor.</div>
+    <div class="field-block"><label class="lab">Psychological history</label>
+      <small class="hint">Depression, suicidal feelings, previous hospitalizations, previous couple / individual / family therapy — what the experience was like, what was most/least helpful, reasons for termination.</small>
+      <textarea class="xl" id="fm_psychhx" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Full name of individual therapist(s)</label><input type="text" class="sm" id="fm_indtherapist" data-field></div>
+    <div class="field-block"><label class="lab">Psychiatric medications</label>
+      <small class="hint">List medication, dosage; indicate if not prescribed or being monitored.</small>
+      <textarea class="lg" id="fm_meds" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Strong points of relationships (each family member's perspective)</label><textarea class="lg" id="fm_strong" data-field></textarea></div>
+  </section>
+
+  <!-- RELATIONSHIP HANDLING -->
+  <section class="card">
+    <div class="step"><span class="stepnum">4</span><h2>Relationship — How Things Are Handled</h2></div>
+    <div class="field-block"><label class="lab">Areas to change in the relationship (each family member's perspective)</label><textarea class="lg" id="fm_change" data-field></textarea></div>
+    <p class="lede" style="margin-left:0;">Level of satisfaction each family member feels with how these are handled, and what could be handled differently:</p>
+    <div class="field-block"><label class="lab">Communication / Trust</label><textarea class="sm" id="fm_comm" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Decision making</label><textarea class="sm" id="fm_decision" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Discipline (How are rules set up? How are rules enforced?)</label><textarea class="sm" id="fm_discipline" data-field></textarea></div>
+  </section>
+
+  <!-- ADDITIONAL QUESTIONS -->
+  <section class="card">
+    <div class="step"><span class="stepnum">5</span><h2>Additional Questions (as relevant)</h2></div>
+    <div class="field-block"><label class="lab">Stresses / coping skills</label>
+      <small class="hint">Other sources of stress (SES, food insufficiency, institutional racism, marginalization). How does the client cope?</small>
+      <textarea class="lg" id="fm_stress" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Depression</label>
+      <small class="hint">Motivation, appetite, sleep disturbance (hours/night, insomnia, hypersomnia, disturbing dreams &amp; frequency).</small>
+      <textarea class="lg" id="fm_depression" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Relationship issues</label>
+      <small class="hint">Family history; messages/experiences growing up; substance use/abuse by family member(s).</small>
+      <textarea class="lg" id="fm_relissues" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Abuse issues</label>
+      <small class="hint">Abuse of client (emotional, physical, sexual, psychological) — if the client wants to talk about it: when did it occur, begin, end?</small>
+      <textarea class="lg" id="fm_abuse" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Interpersonal relationships</label>
+      <small class="hint">Social/support systems, communication issues, current romantic/intimate relationship(s); is present sexual life/expression satisfactory — if not, what would they like different? Sexuality/gender.</small>
+      <textarea class="lg" id="fm_interpersonal" data-field></textarea></div>
+    <div class="field-block"><label class="lab">Medical history</label>
+      <small class="hint">Major illness, disabilities, hospitalizations, current medications (note date/age of significant occurrences).</small>
+      <textarea class="lg" id="fm_medical" data-field></textarea></div>
+  </section>
+
+  <!-- ACTION / ASSIGNMENT -->
+  <section class="card">
+    <div class="step"><span class="stepnum">6</span><h2>Action Taken &amp; Assignment</h2></div>
+    <div class="field-block"><label class="lab">Action taken</label><textarea class="sm" id="fm_action" data-field></textarea></div>
+    <div class="chk"><input type="checkbox" id="fm_intakeonly" data-field><label for="fm_intakeonly">Intake only</label></div>
+    <div class="field-block"><label class="lab">If "intake only," please explain</label><textarea class="sm" id="fm_intakeexp" data-field></textarea></div>
+    <div class="field-block"><label class="lab">If referred out — outside agency/counselor &amp; reason referred</label><textarea class="lg" id="fm_referout" data-field></textarea></div>
+    <h3>Assigned</h3>
+    <div class="two">
+      <div class="field-block"><label class="lab">Name of assigned ICC counselor</label><input type="text" class="sm" id="fm_assigned" data-field></div>
+      <div class="field-block"><label class="lab">Regular ongoing fee $</label><input type="text" class="sm" id="fm_fee" data-field></div>
+      <div class="field-block"><label class="lab">Date of intake</label><input type="text" class="sm" id="fm_idate" data-field></div>
+      <div class="field-block"><label class="lab">Name of intake counselor (print)</label><input type="text" class="sm" id="fm_tname" data-field></div>
+      <div class="field-block full"><label class="lab">Signature of intake counselor</label><input type="text" class="sm" id="fm_sig" data-field></div>
+    </div>
+  </section>
+
+</div>
+
+<div class="bar">
+  <span class="status" id="status">Auto-saving on this device</span>
+  <span class="folder">Save folder: <span id="folderLabel">not set — PDF will download</span></span>
+  <button class="btn-folder" id="folderBtn" type="button">Set folder…</button>
+  <button class="btn-clear" id="clearBtn" type="button">Clear</button>
+  <button class="btn-pdf" id="pdfBtn" type="button">Save as PDF</button>
+</div>
+
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="assets/pdf.js"></script>
+<script src="data/family-schema.js"></script>
+<script src="assets/forms.js"></script>
+</body>
+</html>

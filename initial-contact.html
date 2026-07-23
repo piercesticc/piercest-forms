@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Initial Contact Form · Pierce St ICC</title>
+<link rel="stylesheet" href="assets/clinic.css">
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ HEADER ============ -->
+  <header class="doc">
+    <a class="backlink" href="index.html">← All forms</a>
+    <div class="eyebrow">Integral Counseling Center · Pierce Street</div>
+    <h1>Initial Contact Form</h1>
+    <div class="sub">Phone-shift screening · 2140 Pierce Street, San Francisco CA 94115 · 415-776-3109</div>
+    <div class="topgrid">
+      <div><label class="lab">Client Name</label><input type="text" class="sm" id="f_client" data-field placeholder="First Last"></div>
+      <div><label class="lab">Date</label><input type="date" class="sm" id="f_date" data-field data-default="today"></div>
+      <div class="full"><label class="lab">Staff Name (screened by)</label><input type="text" class="sm" id="f_staff" data-field placeholder="Your name"></div>
+    </div>
+  </header>
+
+  <!-- ============ CONTACT INFO ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">1</span><h2>Contact Information</h2></div>
+    <div class="two">
+      <div class="field-block"><label class="lab">Phone Number</label><input type="tel" class="sm" id="c_phone" data-field></div>
+      <div class="field-block"><label class="lab">Email Address</label><input type="email" class="sm" id="c_email" data-field></div>
+      <div class="field-block full"><label class="lab">Home Address</label><input type="text" class="sm" id="c_addr" data-field></div>
+    </div>
+    <div class="field-block"><label class="lab">Preferred Contact Method <span style="font-weight:400;text-transform:none;letter-spacing:0;">(select all that apply)</span></label>
+      <div class="radiorow">
+        <label><input type="checkbox" id="c_pref_phone" data-field><span>Phone</span></label>
+        <label><input type="checkbox" id="c_pref_email" data-field><span>Email</span></label>
+        <label><input type="checkbox" id="c_pref_text" data-field><span>Text</span></label>
+      </div>
+    </div>
+    <div class="warn"><b>Read to caller:</b> "The Pierce Street Integral Counseling Center is a training clinic affiliated with the California Institute of Integral Studies. All our therapists are fully supervised MA graduates or advanced graduate students."</div>
+    <div class="chk"><input type="checkbox" id="c_disclosure" data-field><label for="c_disclosure">Read the clinic disclosure to the caller</label></div>
+  </section>
+
+  <!-- ============ THERAPEUTIC FRAME ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">2</span><h2>Questions about the Therapeutic Frame</h2></div>
+
+    <div class="field-block"><label class="lab">1. Are you a current ICP student at CIIS?</label>
+      <div class="radiorow">
+        <label><input type="radio" name="q_icp" value="No" data-field><span>No</span></label>
+        <label><input type="radio" name="q_icp" value="Yes" data-field><span>Yes</span></label>
+      </div>
+      <div class="warn big" data-show-when="q_icp:Yes" hidden><b>⚠ Stop — refer out.</b> Current ICP students at CIIS cannot be seen at this clinic. Kindly refer them out and do not proceed with intake.</div>
+    </div>
+
+    <div class="field-block"><label class="lab">2. How'd you hear about us? (be specific)</label>
+      <div class="prompt q">If a current client or therapist referred them, get the specific name.</div>
+      <input type="text" class="sm" id="c_heard" data-field></div>
+
+    <div class="field-block"><label class="lab">3. What are you interested in?</label>
+      <div class="radiorow">
+        <label><input type="radio" name="q_modality" value="In-person" data-field><span>In-person (Pierce &amp; Clay)</span></label>
+        <label><input type="radio" name="q_modality" value="Telehealth" data-field><span>Telehealth</span></label>
+        <label><input type="radio" name="q_modality" value="Mix" data-field><span>A mix of both</span></label>
+      </div>
+      <div class="reveal" data-show-when="q_modality:In-person;q_modality:Mix" hidden>
+        <div class="warn"><b>In-person requires stairs.</b> The clinic is up multiple flights of stairs and cannot accommodate clients who can't climb them. If they can't, refer to <b>Golden Gate ICC · 415-561-0230</b>.</div>
+        <div class="chk"><input type="checkbox" id="c_stairs" data-field><label for="c_stairs">Confirmed the client can climb multiple flights of stairs</label></div>
+        <div class="chk"><input type="checkbox" id="c_goldengate" data-field><label for="c_goldengate">Client cannot climb stairs — referred to Golden Gate ICC (415-561-0230)</label></div>
+      </div>
+    </div>
+
+    <div class="field-block"><label class="lab">4. What type of therapy are you seeking?</label>
+      <div class="radiorow">
+        <label><input type="radio" name="q_type" value="Individual" data-field><span>Individual</span></label>
+        <label><input type="radio" name="q_type" value="Couple" data-field><span>Couple</span></label>
+        <label><input type="radio" name="q_type" value="Family" data-field><span>Family</span></label>
+        <label><input type="radio" name="q_type" value="Other" data-field><span>Other</span></label>
+      </div>
+      <div data-show-when="q_type:Other" hidden style="margin-top:8px;">
+        <input type="text" class="sm" id="c_type_other" data-field placeholder="Describe 'Other'"></div>
+    </div>
+
+    <div class="field-block"><label class="lab">5. Availability for a weekly 50-minute session</label>
+      <small class="hint">Open 8 AM–8 PM Mon–Fri, some weekend availability. Be specific — give at least 3 day/time options.</small>
+      <div class="three">
+        <input type="text" class="sm" id="c_slot1" data-field placeholder="Option 1">
+        <input type="text" class="sm" id="c_slot2" data-field placeholder="Option 2">
+        <input type="text" class="sm" id="c_slot3" data-field placeholder="Option 3">
+      </div>
+      <div class="field-block" style="margin-top:8px;"><textarea class="sm" id="c_avail_notes" data-field placeholder="Any other availability notes"></textarea></div>
+    </div>
+
+    <!-- Couple / Family conditional -->
+    <div class="reveal" data-show-when="q_type:Couple;q_type:Family" hidden>
+      <h3 style="margin-top:0;">For couples / family</h3>
+      <div class="field-block"><label class="lab">Is everyone in the couple/family open to therapy?</label>
+        <small class="hint">If not, we pause until everyone is ready.</small>
+        <div class="radiorow">
+          <label><input type="radio" name="q_all_open" value="Yes" data-field><span>Yes</span></label>
+          <label><input type="radio" name="q_all_open" value="No" data-field><span>No</span></label>
+        </div>
+      </div>
+      <label class="lab">Participants (name / age / contact)</label>
+      <div class="rowset">
+        <div class="prow"><input type="text" id="p1_name" data-field placeholder="Name"><input type="text" id="p1_age" data-field placeholder="Age"><input type="text" id="p1_contact" data-field placeholder="Contact"></div>
+        <div class="prow"><input type="text" id="p2_name" data-field placeholder="Name"><input type="text" id="p2_age" data-field placeholder="Age"><input type="text" id="p2_contact" data-field placeholder="Contact"></div>
+        <div class="prow"><input type="text" id="p3_name" data-field placeholder="Name"><input type="text" id="p3_age" data-field placeholder="Age"><input type="text" id="p3_contact" data-field placeholder="Contact"></div>
+      </div>
+    </div>
+
+    <!-- Child client conditional (family) -->
+    <div class="reveal" data-show-when="q_type:Family" hidden>
+      <h3 style="margin-top:0;">For a child client</h3>
+      <div class="field-block"><label class="lab">Primary caretaker(s) in the child's life</label><input type="text" class="sm" id="c_caretakers" data-field></div>
+      <div class="field-block"><label class="lab">Brief description of the child's family structure</label><textarea class="sm" id="c_family_structure" data-field></textarea></div>
+    </div>
+  </section>
+
+  <!-- ============ DEMOGRAPHICS ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">3</span><h2>Demographic Information <span style="font-weight:400;color:var(--muted);font-size:14px;">(optional)</span></h2></div>
+    <div class="prompt q">"These questions help give us a better sense of your identity." — all optional.</div>
+    <div class="two">
+      <div class="field-block"><label class="lab">Birthdate</label><input type="text" class="sm" id="d_birth" data-field placeholder="MM/DD/YYYY"></div>
+      <div class="field-block"><label class="lab">Age</label><input type="text" class="sm" id="d_age" data-field data-age-of="d_birth"></div>
+      <div class="field-block"><label class="lab">Ethnicity</label><input type="text" class="sm" id="d_ethnicity" data-field></div>
+      <div class="field-block"><label class="lab">Pronouns</label><input type="text" class="sm" id="d_pronouns" data-field></div>
+      <div class="field-block"><label class="lab">Sexual orientation</label><input type="text" class="sm" id="d_orientation" data-field></div>
+      <div class="field-block"><label class="lab">Relationship status</label><input type="text" class="sm" id="d_relstatus" data-field></div>
+    </div>
+    <label class="lab">Emergency contact</label>
+    <div class="rowset"><div class="prow">
+      <input type="text" id="e_name" data-field placeholder="Name">
+      <input type="text" id="e_rel" data-field placeholder="Relationship">
+      <input type="text" id="e_phone" data-field placeholder="Phone">
+    </div></div>
+    <div class="field-block"><label class="lab">Does this person have an accent or is soft-spoken?</label>
+      <div class="radiorow">
+        <label><input type="radio" name="e_soft" value="No" data-field><span>No</span></label>
+        <label><input type="radio" name="e_soft" value="Yes" data-field><span>Yes</span></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCREENING ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">4</span><h2>Screening Questions</h2></div>
+    <div class="field-block"><label class="lab">Have you been in therapy before? What worked / what didn't?</label>
+      <textarea class="lg" id="s_prior" data-field></textarea></div>
+    <div class="field-block"><label class="lab">What brings you in? Why are you seeking counseling services?</label>
+      <textarea class="lg" id="s_bringsin" data-field></textarea></div>
+    <div class="reveal" data-show-when="q_type:Couple" hidden>
+      <div class="field-block" style="margin:0;"><label class="lab">For couples — do disagreements ever become physical?</label>
+        <textarea class="sm" id="s_conflict" data-field></textarea></div>
+    </div>
+    <div class="field-block"><label class="lab">Currently prescribed any psychiatric medications?</label>
+      <div class="radiorow">
+        <label><input type="radio" name="q_meds" value="No" data-field><span>No</span></label>
+        <label><input type="radio" name="q_meds" value="Yes" data-field><span>Yes</span></label>
+      </div>
+      <div data-show-when="q_meds:Yes" hidden style="margin-top:8px;">
+        <input type="text" class="sm" id="s_meds_detail" data-field placeholder="Which medications / prescriber"></div>
+    </div>
+    <div class="field-block"><label class="lab">Do you use any other substances? Which, how often, how much, and why?</label>
+      <textarea class="lg" id="s_substances" data-field></textarea></div>
+  </section>
+
+  <!-- ============ SUICIDALITY ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">5</span><h2>Suicidality</h2></div>
+    <div class="prompt q">Optional transition: "Next, we're going to transition into talking about suicidality. This topic can be vulnerable, so feel free to take it at your own pace."</div>
+
+    <div class="field-block"><label class="lab">Are you currently feeling suicidal?</label>
+      <div class="radiorow">
+        <label><input type="radio" name="q_si_current" value="No" data-field><span>No</span></label>
+        <label><input type="radio" name="q_si_current" value="Yes" data-field><span>Yes</span></label>
+      </div>
+      <div class="warn big" data-show-when="q_si_current:Yes" hidden>
+        <b>⚠ Provide crisis resources now.</b> Suicide &amp; Crisis Lifeline <b>988</b> · SF Suicide Prevention <b>(415) 781-0500</b>.
+        After the call, contact Director <b>Lisa Garbus (415) 279-4079</b>. See the crisis protocol below.
+      </div>
+    </div>
+
+    <div class="field-block"><label class="lab">Have you felt suicidal in the past?</label>
+      <div class="radiorow">
+        <label><input type="radio" name="q_si_past" value="No" data-field><span>No</span></label>
+        <label><input type="radio" name="q_si_past" value="Yes" data-field><span>Yes</span></label>
+      </div>
+    </div>
+
+    <div class="reveal" data-show-when="q_si_current:Yes;q_si_past:Yes" hidden>
+      <label class="lab">Context — ideation, plan, means, time</label>
+      <div class="prompt q">"Would you be open to sharing what that was like?" · thoughts of harming self/others? · suicide as a way to deal with unbearable stress? · a plan? · the means to carry it out? a time?</div>
+      <textarea class="lg" id="s_si_context" data-field></textarea>
+    </div>
+
+    <div class="prompt q">Brief care before finances: "We've wrapped up that section. Before we move to finances and wrapping up — is there anything else that feels important to share?"</div>
+    <div class="field-block"><label class="lab">Anything else important to share</label><textarea class="sm" id="s_anything" data-field></textarea></div>
+
+    <details class="ref">
+      <summary>Crisis resources &amp; suicidality protocol</summary>
+      <div class="ref-body">
+        <p><b>Suicide Prevention &amp; Crisis Line</b> — (415) 781-0500 or 988</p>
+        <p><b>Mobile Crisis</b> — (415) 255-3610</p>
+        <p><b>SF General (Psychiatric Emergency Services)</b> — (415) 206-8125 · 24-hour, Potrero between 22nd &amp; 23rd</p>
+        <p><b>Westside Crisis Line</b> — (415) 353-5050 · 9am–9pm (no clients after 7pm)</p>
+        <p style="margin-top:10px;"><b>If currently suicidal with plan &amp; means:</b> ask directly whether they're concerned they might act. Assess support system — anyone to call, anyone with them now, anything that would help. If appropriate, seek a commitment not to act before calling someone who can help. Provide the numbers above and <b>call the Center Director(s) / supervisors immediately.</b></p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ FINANCIAL ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">6</span><h2>Financial Questions</h2></div>
+    <div class="warn"><b>Do not disclose fees on this call.</b> Fees are set after the Clinic Director assesses the case and assigns a clinician; the assigned clinician discusses fees on the first phone call.</div>
+    <div class="field-block"><label class="lab">Estimated gross monthly household income</label>
+      <small class="hint">Include partner income, loans, grants, or any other streams factored into a tax return.</small>
+      <input type="text" class="sm" id="fin_income" data-field></div>
+    <div class="field-block"><label class="lab">Number of dependents</label><input type="text" class="sm" id="fin_deps" data-field></div>
+
+    <details class="ref">
+      <summary>Sliding fee scale (staff reference — do not quote to caller)</summary>
+      <div class="ref-body">
+        <div class="tablescroll"><table class="fee">
+          <tr><th>Gross monthly income</th><th>self</th><th>+1</th><th>+2</th><th>+3</th><th>+4</th></tr>
+          <tr><td>$1500 or under</td><td>35</td><td>35</td><td>35</td><td>35</td><td>35</td></tr>
+          <tr><td>$1501–2100</td><td>35</td><td>35</td><td>35</td><td>35</td><td>35</td></tr>
+          <tr><td>$2101–2700</td><td>40</td><td>35</td><td>35</td><td>35</td><td>35</td></tr>
+          <tr><td>$2701–3000</td><td>45</td><td>40</td><td>40</td><td>35</td><td>35</td></tr>
+          <tr><td>$3001–3300</td><td>50</td><td>45</td><td>40</td><td>35</td><td>35</td></tr>
+          <tr><td>$3301–3600</td><td>55</td><td>50</td><td>45</td><td>40</td><td>35</td></tr>
+          <tr><td>$3601–3900</td><td>60</td><td>55</td><td>50</td><td>45</td><td>40</td></tr>
+          <tr><td>$3901–4200</td><td>65</td><td>60</td><td>55</td><td>50</td><td>45</td></tr>
+          <tr><td>$4201–4500</td><td>70</td><td>65</td><td>55</td><td>45</td><td>40</td></tr>
+          <tr><td>$4501–4800</td><td>75</td><td>70</td><td>60</td><td>50</td><td>40</td></tr>
+          <tr><td>$4801–5100</td><td>80</td><td>75</td><td>65</td><td>55</td><td>45</td></tr>
+          <tr><td>$5101–5400</td><td>85</td><td>80</td><td>70</td><td>60</td><td>50</td></tr>
+          <tr><td>$5401–5700</td><td>90</td><td>85</td><td>75</td><td>65</td><td>55</td></tr>
+          <tr><td>$5701–6000</td><td>95</td><td>90</td><td>80</td><td>70</td><td>60</td></tr>
+          <tr><td>$6001–6300</td><td>100</td><td>95</td><td>85</td><td>75</td><td>65</td></tr>
+          <tr><td>$6301–6600</td><td>110</td><td>100</td><td>90</td><td>80</td><td>70</td></tr>
+          <tr><td>$6601–6900</td><td>115</td><td>105</td><td>95</td><td>85</td><td>75</td></tr>
+          <tr><td>$6901–7200</td><td>120</td><td>110</td><td>100</td><td>90</td><td>80</td></tr>
+          <tr><td>$7201–7500</td><td>130</td><td>120</td><td>110</td><td>100</td><td>90</td></tr>
+          <tr><td>$7501–7800</td><td>135</td><td>125</td><td>115</td><td>110</td><td>100</td></tr>
+          <tr><td>$7801–8100</td><td>140</td><td>130</td><td>120</td><td>115</td><td>110</td></tr>
+          <tr><td>$8101–8400</td><td>145</td><td>140</td><td>130</td><td>120</td><td>115</td></tr>
+          <tr><td>$8401–8700</td><td>150</td><td>145</td><td>140</td><td>135</td><td>130</td></tr>
+          <tr><td>$8701 or higher</td><td>160</td><td>155</td><td>150</td><td>145</td><td>140</td></tr>
+        </table></div>
+        <p><b>We are unable to accept Medi-Cal.</b> Clients pay in full at each session; we provide a monthly superbill they may submit to their insurance for possible reimbursement.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ CLOSING ============ -->
+  <section class="card">
+    <div class="step"><span class="stepnum">7</span><h2>Closing</h2></div>
+    <div class="prompt q">"Do you have any questions about what we talked about today? If something comes up later, you can always reach back out to us at 415-776-3109."</div>
+    <div class="prompt q">"In the meantime, I'll submit this form to the Clinic Director, who will use the information to assign your case to a therapist on staff. You should receive a call with more information within the next week."</div>
+    <div class="field-block"><label class="lab">Staff notes / anything to flag for the Clinic Director</label><textarea class="lg" id="c_staffnotes" data-field></textarea></div>
+  </section>
+
+</div>
+
+<!-- ============ ACTION BAR ============ -->
+<div class="bar">
+  <span class="status" id="status">Auto-saving on this device</span>
+  <span class="folder">Save folder: <span id="folderLabel">not set — PDF will download</span></span>
+  <button class="btn-folder" id="folderBtn" type="button">Set folder…</button>
+  <button class="btn-clear" id="clearBtn" type="button">Clear</button>
+  <button class="btn-pdf" id="pdfBtn" type="button">Save as PDF</button>
+</div>
+
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="assets/pdf.js"></script>
+<script src="data/ic-schema.js"></script>
+<script src="assets/forms.js"></script>
+</body>
+</html>
