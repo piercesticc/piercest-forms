@@ -223,7 +223,7 @@ button{
       <p>Phone-shift screening call — contact info, therapeutic frame, screening, and financial questions.</p>
       <span class="who">Phone shift staff</span>
     </a>
-    <a class="formcard" href="#intake">
+    <a class="formcard" href="#intake-choose">
       <div class="ic">📝</div>
       <h2>Intake Forms Hub</h2>
       <p>Start the intake flow and choose Individual, Couple, or Family intake forms from one place.</p>
@@ -253,11 +253,9 @@ button{
       <div class="full"><label class="lab">Staff Name (screened by)</label><input type="text" class="sm" id="ic-f_staff" data-field placeholder="Your name"></div>
     </div>
     <div style="margin-top:10px;">
-      <label class="lab">Intake variant</label>
-      <div style="display:flex;gap:8px;margin-top:6px;">
-        <a class="formcard" href="#intake" style="padding:8px 12px;border-radius:8px;min-width:110px;text-align:center;">Individual</a>
-        <a class="formcard" href="#couple" style="padding:8px 12px;border-radius:8px;min-width:110px;text-align:center;">Couple</a>
-        <a class="formcard" href="#family" style="padding:8px 12px;border-radius:8px;min-width:110px;text-align:center;">Family</a>
+      <label class="lab">Display options</label>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
+        <div class="chk"><input type="checkbox" id="in-promptsToggle" checked><label for="in-promptsToggle">Show therapist prompts in session</label></div>
       </div>
     </div>
   </header>
@@ -515,6 +513,25 @@ button{
 </div>
 
 
+</section>
+
+<section class="view" id="view-intake-choose" hidden>
+<div class="wrap">
+  <header class="doc">
+    <a class="backlink" href="#home">← All forms</a>
+    <div class="eyebrow">Integral Counseling Center · Pierce Street</div>
+    <h1>Intake — Choose a form</h1>
+    <div class="sub">Select the intake variant to open the correct form.</div>
+    <div style="margin-top:14px;">
+      <label class="lab">Choose intake type</label>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <a class="formcard" href="#intake" style="padding:10px 14px;border-radius:8px;min-width:120px;text-align:center;">Individual</a>
+        <a class="formcard" href="#couple" style="padding:10px 14px;border-radius:8px;min-width:120px;text-align:center;">Couple</a>
+        <a class="formcard" href="#family" style="padding:10px 14px;border-radius:8px;min-width:120px;text-align:center;">Family</a>
+      </div>
+    </div>
+  </header>
+</div>
 </section>
 
 <section class="view" id="view-intake" hidden>
@@ -2255,6 +2272,11 @@ REG["family"].__prefix = "fa-";
   function getAutoUpdateFlag(key){ try{ return localStorage.getItem(autoUpdateFlagKey(key)) === '1'; }catch(e){ return false; } }
   function setAutoUpdateFlag(key, val){ try{ localStorage.setItem(autoUpdateFlagKey(key), val ? '1' : '0'); }catch(e){} }
 
+  // prompts visibility (per-form)
+  function promptsFlagKey(key){ return draftsStoreKey(key) + ':prompts'; }
+  function getPromptsFlag(key){ try{ var v = localStorage.getItem(promptsFlagKey(key)); return v === null ? true : (v === '1'); }catch(e){ return true; } }
+  function setPromptsFlag(key, val){ try{ localStorage.setItem(promptsFlagKey(key), val ? '1' : '0'); }catch(e){} }
+
   function updateExistingDraftFor(key){
     try{
       var list = getDrafts(key);
@@ -2335,6 +2357,24 @@ REG["family"].__prefix = "fa-";
     var view=document.getElementById('view-'+key);
     view.addEventListener('input', function(e){ if(e.target.matches('[data-field]')) save(key); });
     view.addEventListener('change', function(e){ if(e.target.matches('[data-field]')) save(key); evalConds(key); });
+
+    // prompts toggle (per-form): element id uses prefix, e.g. 'in-promptsToggle'
+    try{
+      var promptsChk = document.getElementById(p+'promptsToggle');
+      if(promptsChk){
+        // initialize from storage
+        var stored = getPromptsFlag(key);
+        promptsChk.checked = !!stored;
+        var applyPrompts = function(){
+          var show = !!promptsChk.checked;
+          $$('#view-'+key+' .prompt').forEach(function(el){ el.hidden = !show; });
+          setPromptsFlag(key, show);
+        };
+        promptsChk.addEventListener('change', applyPrompts);
+        // apply immediately
+        applyPrompts();
+      }
+    }catch(e){ /* ignore */ }
   }
 
   // router
