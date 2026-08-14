@@ -229,55 +229,43 @@
       evalConditionals();
     });
 
-    // folder button
-    const folderBtn = $("folderBtn"), folderLbl = $("folderLabel");
-    if(folderLbl) folderLbl.textContent = PDF.folderLabel();
-    if(folderBtn){
-      folderBtn.addEventListener("click", async () => {
-        const ok = await PDF.pickFolder();
-        if(folderLbl) folderLbl.textContent = PDF.folderLabel();
-        if(ok) flash("Save folder set");
-      });
-    }
+    // folder buttons/labels (per-view)
+    document.querySelectorAll('[id$="folderLabel"]').forEach(lbl => lbl.textContent = PDF.folderLabel());
+    document.querySelectorAll('.btn-folder').forEach(btn => btn.addEventListener('click', async () => {
+      const ok = await PDF.pickFolder();
+      document.querySelectorAll('[id$="folderLabel"]').forEach(lbl => lbl.textContent = PDF.folderLabel());
+      if(ok) flash('Save folder set');
+    }));
 
-    // clear
-    const clearBtn = $("clearBtn");
-    if(clearBtn){
-      clearBtn.addEventListener("click", () => {
-        if(!confirm("Clear all entries on this device? This cannot be undone.")) return;
-        fields().forEach(el => {
-          if(el.type === "checkbox" || el.type === "radio") el.checked = false;
-          else el.value = "";
-        });
-        try{ localStorage.removeItem(KEY); }catch(e){}
-        applyDefaults();
-        evalConditionals();
-        flash("Cleared", false);
+    // clear (per-view clear buttons)
+    document.querySelectorAll('.btn-clear').forEach(b => b.addEventListener('click', () => {
+      if(!confirm('Clear all entries on this device? This cannot be undone.')) return;
+      fields().forEach(el => {
+        if(el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+        else el.value = '';
       });
-    }
+      try{ localStorage.removeItem(KEY); }catch(e){}
+      applyDefaults();
+      evalConditionals();
+      flash('Cleared', false);
+    }));
 
-    // Drafts list button
-    const draftsBtn = $("draftsBtn");
-    if(draftsBtn){ draftsBtn.addEventListener('click', () => { renderDraftsPanel(); }); }
+    // Drafts list buttons (per-view). Attach to any .btn-draftlist so prefixed ids work.
+    document.querySelectorAll('.btn-draftlist').forEach(b => b.addEventListener('click', () => { renderDraftsPanel(); }));
 
-    // export PDF
-    const pdfBtn = $("pdfBtn");
-    if(pdfBtn){
-      pdfBtn.addEventListener("click", async () => {
-        save();
-        if(!window.jspdf){ alert("PDF library failed to load. Make sure the 'vendor' folder sits next to this app."); return; }
-        if(typeof FORM.build !== "function"){ alert("Form schema missing."); return; }
-        try{
-          const doc = FORM.build(PDF.get, PDF.buildDoc);
-          const blob = doc.output("blob");
-          const res = await PDF.saveBlob(blob, PDF.pdfFilename());
-          flash(res.saved ? `Saved → ${res.folder}/${res.filename}` : `Downloaded ${res.filename}`, false);
-        }catch(err){
-          console.error(err);
-          alert("Could not generate the PDF.\n\n" + (err && err.message ? err.message : err));
-        }
-      });
-    }
+    // export PDF (attach to any .btn-pdf)
+    document.querySelectorAll('.btn-pdf').forEach(b => b.addEventListener('click', async () => {
+      save();
+      if(!window.jspdf){ alert("PDF library failed to load. Make sure the 'vendor' folder sits next to this app."); return; }
+      const FORM_NOW = window.FORM || FORM || {};
+      if(typeof FORM_NOW.build !== 'function'){ alert('Form schema missing.'); return; }
+      try{
+        const doc = FORM_NOW.build(PDF.get, PDF.buildDoc);
+        const blob = doc.output('blob');
+        const res = await PDF.saveBlob(blob, PDF.pdfFilename());
+        flash(res.saved ? `Saved → ${res.folder}/${res.filename}` : `Downloaded ${res.filename}`, false);
+      }catch(err){ console.error(err); alert('Could not generate the PDF.\n\n' + (err && err.message ? err.message : err)); }
+    }));
   }
 
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
