@@ -2157,6 +2157,12 @@ REG["family"].__prefix = "fa-";
   function save(key){
     try{ localStorage.setItem(storeKey(key), JSON.stringify(collect(key)));
       setStatus(key,'Saved ✓',true);
+      // Auto-update running draft if enabled for this form
+      try{
+        if(getAutoUpdateFlag && getAutoUpdateFlag(key)){
+          updateExistingDraftFor(key);
+        }
+      }catch(e){ /* ignore */ }
     }catch(e){ setStatus(key,'Save unavailable (private mode)',false); }
   }
   function load(key){
@@ -2237,18 +2243,39 @@ REG["family"].__prefix = "fa-";
   function deleteDraftFor(key, id){ var list = getDrafts(key).filter(function(d){ return d.id !== id; }); persistDrafts(key, list); }
   function loadDraftFor(key, id){ var list = getDrafts(key); var d = list.find(function(x){ return x.id === id; }); if(!d) return; var data = d.data || {}; fieldsOf(key).forEach(function(el){ var idn = el.id; if(el.type === 'checkbox'){ if(idn in data) el.checked = !!data[idn]; } else if(el.type === 'radio'){ if(data[el.name] != null) el.checked = (data[el.name] === el.value); } else if(idn in data && data[idn] != null){ el.value = data[idn]; } }); setStatus(key, 'Draft loaded'); save(key); evalConds(key); }
 
+  function autoUpdateFlagKey(key){ return draftsStoreKey(key) + ':autoupdate'; }
+  function getAutoUpdateFlag(key){ try{ return localStorage.getItem(autoUpdateFlagKey(key)) === '1'; }catch(e){ return false; } }
+  function setAutoUpdateFlag(key, val){ try{ localStorage.setItem(autoUpdateFlagKey(key), val ? '1' : '0'); }catch(e){} }
+
+  function updateExistingDraftFor(key){
+    try{
+      var list = getDrafts(key);
+      var form = REG[key] || {};
+      var p = form.__prefix || '';
+      var nameId = p + (form.meta && form.meta.nameId || 'f_client');
+      var dateId = p + (form.meta && form.meta.dateId || 'f_date');
+      var client = PDF.val(nameId) || '';
+      var dateVal = PDF.val(dateId) || PDF.todayISO();
+      var initials = client.split(/\s+/).filter(Boolean).slice(0,3).map(function(n){ return n[0].toUpperCase(); }).join('') || 'XX';
+      var kkey = initials + '_' + dateVal;
+      var existing = list.find(function(d){ return d.key === kkey; });
+      if(existing){ existing.data = collect(key); existing.updated = new Date().toISOString(); persistDrafts(key, list); setStatus(key, 'Draft auto-updated'); }
+    }catch(e){ /* ignore */ }
+  }
+
   function renderDraftsPanelFor(key){
     var panelId = 'draftsPanel-' + key;
     var panel = document.getElementById(panelId);
     if(!panel){ panel = document.createElement('div'); panel.id = panelId; panel.className = 'drafts-panel'; panel.style.cssText = 'position:fixed;right:12px;top:60px;width:360px;max-height:70vh;overflow:auto;background:#fff;border:1px solid #e6e6e6;padding:12px;border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,.12);z-index:9999;font-family:system-ui, -apple-system, Segoe UI, Roboto, sans-serif;'; document.body.appendChild(panel); }
     var list = getDrafts(key);
+    var auto = getAutoUpdateFlag(key) ? 'checked' : '';
     var form = REG[key], p = form.__prefix || '';
     var client = PDF.val(p + (form.meta && form.meta.nameId || 'f_client')) || '';
     var dateVal = PDF.val(p + (form.meta && form.meta.dateId || 'f_date')) || PDF.todayISO();
     var initials = client.split(/\s+/).filter(Boolean).slice(0,3).map(function(n){ return n[0].toUpperCase(); }).join('') || 'XX';
     var suggestedName = initials + ' ' + dateVal;
 
-    panel.innerHTML = '\n      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">\n        <strong>Drafts</strong>\n        <button id="closeDrafts-'+key+'" style="font-size:12px;background:transparent;border:none;cursor:pointer">✕</button>\n      </div>\n      <div style="margin-bottom:10px;display:flex;gap:8px;align-items:center;">\n        <input id="draftNameInput-'+key+'" placeholder="Draft name" style="flex:1;padding:6px;border:1px solid #ddd;border-radius:6px" value="'+escapeHtml(suggestedName)+'" />\n        <button id="saveOrUpdateDraft-'+key+'" style="padding:6px 10px;background:#2b6eed;color:#fff;border:none;border-radius:6px;cursor:pointer">Save / Update</button>\n      </div>\n      <div style="font-size:13px;color:#666;margin-bottom:8px">Saved drafts on this device</div>\n    ';
+    panel.innerHTML = '\n+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">\n+        <strong>Drafts</strong>\n+        <button id="closeDrafts-'+key+'" style="font-size:12px;background:transparent;border:none;cursor:pointer">✕</button>\n+      </div>\n+      <div style="margin-bottom:10px;display:flex;gap:8px;align-items:center;">\n+        <input id="draftNameInput-'+key+'" placeholder="Draft name" style="flex:1;padding:6px;border:1px solid #ddd;border-radius:6px" value="'+escapeHtml(suggestedName)+'" />\n+        <button id="saveOrUpdateDraft-'+key+'" style="padding:6px 10px;background:#2b6eed;color:#fff;border:none;border-radius:6px;cursor:pointer">Save / Update</button>\n+      </div>\n+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">\n+        <input type="checkbox" id="autoUpdateChk-'+key+'" '+auto+' />\n+        <label for="autoUpdateChk-'+key+'" style="font-size:13px;color:#444">Auto-update running draft on autosave</label>\n+      </div>\n+      <div style="font-size:13px;color:#666;margin-bottom:8px">Saved drafts on this device</div>\n    ';
 
     if(list.length === 0){ panel.insertAdjacentHTML('beforeend','<div style="color:#666">No drafts saved on this device.</div>'); }
     else{
@@ -2263,6 +2290,8 @@ REG["family"].__prefix = "fa-";
 
     panel.querySelector('#closeDrafts-'+key).addEventListener('click', function(){ panel.remove(); });
     panel.querySelector('#saveOrUpdateDraft-'+key).addEventListener('click', function(){ var name = panel.querySelector('#draftNameInput-'+key).value.trim(); if(!name){ alert('Please provide a draft name.'); return; } saveDraftFor(key, name); renderDraftsPanelFor(key); });
+    var chk = panel.querySelector('#autoUpdateChk-'+key);
+    if(chk){ chk.addEventListener('change', function(e){ setAutoUpdateFlag(key, !!e.target.checked); }); }
     panel.querySelectorAll('button[data-load]').forEach(function(b){ b.addEventListener('click', function(e){ var id = e.currentTarget.getAttribute('data-load'); loadDraftFor(key, id); panel.remove(); }); });
     panel.querySelectorAll('button[data-delete]').forEach(function(b){ b.addEventListener('click', function(e){ var id = e.currentTarget.getAttribute('data-delete'); if(confirm('Delete this draft?')){ deleteDraftFor(key, id); renderDraftsPanelFor(key); } }); });
   }
