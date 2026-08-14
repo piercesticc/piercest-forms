@@ -56,8 +56,25 @@
   }
   function saveDraft(name){
     const list = getDrafts();
+    // compute client initials and date (use session date if present)
+    const client = (document.getElementById('f_client') && document.getElementById('f_client').value) || '';
+    const dateVal = (document.getElementById('f_date') && document.getElementById('f_date').value) || PDF.todayISO();
+    const initials = client.split(/\s+/).filter(Boolean).slice(0,3).map(n=>n[0].toUpperCase()).join('') || 'XX';
+    const key = `${initials}_${dateVal}`;
+    const computedName = name || `${initials} ${dateVal}`;
+    // if a draft for this key exists, update it rather than adding a new one
+    const existing = list.find(d => d.key === key);
+    if(existing){
+      existing.name = computedName;
+      existing.data = collect();
+      existing.updated = new Date().toISOString();
+      persistDrafts(list);
+      flash("Draft updated");
+      return existing;
+    }
     const id = Date.now().toString();
-    const draft = { id, name: name || (document.getElementById('f_client') && document.getElementById('f_client').value) || `Draft ${new Date().toLocaleString()}`, created: new Date().toISOString(), data: collect() };
+    const draft = { id, key, name: computedName, created: new Date().toISOString(), data: collect() };
+    // put newest at front
     list.unshift(draft);
     persistDrafts(list);
     flash("Draft saved");
@@ -86,24 +103,53 @@
     let panel = document.getElementById('draftsPanel');
     if(!panel){
       panel = document.createElement('div'); panel.id = 'draftsPanel'; panel.className = 'drafts-panel';
-      panel.style.cssText = 'position:fixed;right:12px;top:60px;width:320px;max-height:60vh;overflow:auto;background:white;border:1px solid #bbb;padding:10px;box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:9999;font-family:system-ui, -apple-system, Segoe UI, Roboto, sans-serif;';
+      panel.style.cssText = 'position:fixed;right:12px;top:60px;width:360px;max-height:70vh;overflow:auto;background:#fff;border:1px solid #e6e6e6;padding:12px;border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,.12);z-index:9999;font-family:system-ui, -apple-system, Segoe UI, Roboto, sans-serif;';
       document.body.appendChild(panel);
     }
     const list = getDrafts();
-    panel.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><strong>Drafts</strong><button id="closeDrafts" style="font-size:12px">Close</button></div>`;
+    // compute current suggestion
+    const client = (document.getElementById('f_client') && document.getElementById('f_client').value) || '';
+    const dateVal = (document.getElementById('f_date') && document.getElementById('f_date').value) || PDF.todayISO();
+    const initials = client.split(/\s+/).filter(Boolean).slice(0,3).map(n=>n[0].toUpperCase()).join('') || 'XX';
+    const suggestedName = `${initials} ${dateVal}`;
+
+    panel.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <strong>Drafts</strong>
+        <button id="closeDrafts" style="font-size:12px;background:transparent;border:none;cursor:pointer">✕</button>
+      </div>
+      <div style="margin-bottom:10px;display:flex;gap:8px;align-items:center;">
+        <input id="draftNameInput" placeholder="Draft name" style="flex:1;padding:6px;border:1px solid #ddd;border-radius:6px" value="${escapeHtml(suggestedName)}" />
+        <button id="saveOrUpdateDraft" style="padding:6px 10px;background:#2b6eed;color:#fff;border:none;border-radius:6px;cursor:pointer">Save / Update</button>
+      </div>
+      <div style="font-size:13px;color:#666;margin-bottom:8px">Saved drafts on this device</div>
+    `;
+
     if(list.length === 0){ panel.insertAdjacentHTML('beforeend','<div style="color:#666">No drafts saved on this device.</div>'); }
     else{
       list.forEach(d => {
         const item = document.createElement('div');
-        item.style.cssText = 'border-top:1px solid #eee;padding:8px 0;display:flex;justify-content:space-between;align-items:center;gap:8px;';
-        const left = document.createElement('div'); left.style.flex = '1';
-        left.innerHTML = `<div style="font-weight:600">${escapeHtml(d.name)}</div><div style="font-size:12px;color:#666">${new Date(d.created).toLocaleString()}</div>`;
+        item.style.cssText = 'border-top:1px solid #f1f1f1;padding:10px 0;display:flex;gap:10px;align-items:center;';
+        const avatar = document.createElement('div');
+        const nameText = String(d.name || 'Draft');
+        const avatarLabel = (nameText.split(' ')[0] || '').slice(0,2).toUpperCase();
+        avatar.style.cssText = 'width:40px;height:40px;border-radius:50%;background:#f3f6ff;color:#1f3fbf;display:flex;align-items:center;justify-content:center;font-weight:700;border:1px solid #e6eefc';
+        avatar.textContent = avatarLabel;
+        const info = document.createElement('div'); info.style.flex = '1';
+        info.innerHTML = `<div style="font-weight:600">${escapeHtml(d.name)}</div><div style="font-size:12px;color:#888">${new Date(d.created).toLocaleString()}${d.updated? ' · updated '+new Date(d.updated).toLocaleString():''}</div>`;
         const actions = document.createElement('div');
-        actions.innerHTML = `<button data-load="${d.id}" style="margin-right:6px">Load</button><button data-delete="${d.id}">Delete</button>`;
-        item.appendChild(left); item.appendChild(actions); panel.appendChild(item);
+        actions.innerHTML = `<button data-load="${d.id}" style="margin-right:6px;padding:6px 8px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer">Open</button><button data-delete="${d.id}" style="padding:6px 8px;border-radius:6px;border:1px solid #f1c0c0;background:#fff;color:#b00000;cursor:pointer">Delete</button>`;
+        item.appendChild(avatar); item.appendChild(info); item.appendChild(actions); panel.appendChild(item);
       });
     }
+
     panel.querySelector('#closeDrafts').addEventListener('click', () => panel.remove());
+    panel.querySelector('#saveOrUpdateDraft').addEventListener('click', () => {
+      const name = panel.querySelector('#draftNameInput').value.trim();
+      if(!name){ alert('Please provide a draft name.'); return; }
+      saveDraft(name);
+      renderDraftsPanel();
+    });
     panel.querySelectorAll('button[data-load]').forEach(b => b.addEventListener('click', e => { const id = e.currentTarget.getAttribute('data-load'); loadDraft(id); panel.remove(); }));
     panel.querySelectorAll('button[data-delete]').forEach(b => b.addEventListener('click', e => { const id = e.currentTarget.getAttribute('data-delete'); if(confirm('Delete this draft?')){ deleteDraft(id); renderDraftsPanel(); } }));
   }
@@ -207,16 +253,6 @@
         applyDefaults();
         evalConditionals();
         flash("Cleared", false);
-      });
-    }
-
-    // Save draft button
-    const saveDraftBtn = $("saveDraftBtn");
-    if(saveDraftBtn){
-      saveDraftBtn.addEventListener('click', () => {
-        const suggested = (document.getElementById('f_client') && document.getElementById('f_client').value) || '';
-        const name = prompt('Name this draft', suggested || `Draft ${new Date().toLocaleString()}`);
-        if(name) saveDraft(name);
       });
     }
 
