@@ -1,5 +1,6 @@
 /* ============================================================
-   Build PierceStForms.html — one self-contained, emailable file.
+   Build index.html — one self-contained, emailable file that is
+   also the site root (localhost:8000 / the Pages URL land here).
    Inlines CSS + jsPDF + the PDF engine + all four form schemas +
    all four form bodies, with a tiny in-page router. Every form's
    ids/names are prefixed so they can coexist in one document.
@@ -236,6 +237,31 @@ ${registry}
 </html>
 `;
 
-fs.writeFileSync(path.join(DIR, "PierceStForms.html"), out);
+// ---- guard ----------------------------------------------------------------
+// The shipped index.html has been hand-edited well past this script's template:
+// it carries the drafts module, the #intake-choose view, and the prompts toggle,
+// none of which exist above. Rebuilding would silently drop all three. Refuse to
+// overwrite unless the caller has read that and passes --force.
+const target = path.join(DIR, "index.html");
+const outFlag = process.argv.indexOf("--out");
+const outPath = outFlag > -1 && process.argv[outFlag + 1]
+  ? path.join(DIR, process.argv[outFlag + 1])
+  : target;
+
+if (outPath === target && fs.existsSync(target) && !process.argv.includes("--force")) {
+  console.error(
+    "Refusing to overwrite index.html.\n\n" +
+    "The shipped index.html contains features this build template does not:\n" +
+    "  • the drafts module (save / open / auto-update, stable draft ids)\n" +
+    "  • the #intake-choose view (Individual / Couple / Family picker)\n" +
+    "  • the per-form prompts toggle\n\n" +
+    "Back-port them into the `controller` template and the home view above,\n" +
+    "then re-run with --force. To inspect the build first:\n" +
+    "  node build-single-file.js --out build-preview.html\n"
+  );
+  process.exit(1);
+}
+
+fs.writeFileSync(outPath, out);
 const kb = Math.round(Buffer.byteLength(out)/1024);
-console.log(`Wrote PierceStForms.html (${kb} KB) — ${FORMS.length} forms bundled.`);
+console.log(`Wrote ${path.basename(outPath)} (${kb} KB) — ${FORMS.length} forms bundled.`);
