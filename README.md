@@ -72,12 +72,12 @@ couple.html             │  (static markup + [data-field] inputs)
 family.html             ┘
 assets/
   clinic.css            shared design system (all styling lives here)
-  pdf.js                shared PDF engine: buildDoc(), flag block, slug, saveBlob
+  pdf.js                shared PDF engine: buildDoc() block types, slug, saveBlob
   forms.js              shared engine: autosave, Clear, data-show-when conditionals, export
 data/
   ic-schema.js          ┐ per-form data: storage key, meta, filename, and build() which
   intake-schema.js      │ returns the PDF layout. This is the ONLY form-specific logic.
-  couple-schema.js      │
+  couple-schema.js      │ (ic-schema.js also holds the sliding fee scale + its enhance() hook)
   family-schema.js      ┘
 vendor/
   jspdf.umd.min.js      bundled PDF library (v2.5.1)
@@ -104,9 +104,22 @@ and the date falls back to today — a PDF always gets a sane filename.
    (e.g. `data-show-when="q_si_current:Yes;q_si_past:Yes"`).
 3. **Add it to the PDF** in the form's `data/<form>-schema.js` using the helpers in `build()`:
    `S("Section")`, `F("Label", get("id"))` for a short field, `P("Label","id")` for a narrative
-   block, `it.push({type:"flag", k, v})` for a highlighted risk/refer-out callout, and
-   `it.push({type:"sig", left, right})` for a signature line.
-4. **New form?** Copy a form's `.html` + `data/*-schema.js`, give it a unique `storageKey`, and add a
+   block, `it.push({type:"flag", k, v})` for a highlighted risk/refer-out callout,
+   `it.push({type:"callout", k, v})` for a neutral (accent-tinted) note,
+   `it.push({type:"table", title, head, rows, highlight:{row,col}, legend, note})` for a grid
+   table, and `it.push({type:"sig", left, right})` for a signature line.
+4. **Per-form UI (optional):** a schema may define `enhance({root, get})`. The engine calls it once
+   after saved values are restored; it may return `{refresh}`, which is re-run after Clear or a
+   draft load. The Initial Contact form uses this to render the fee scale into `[data-fee-scale]`
+   and light up the matching band as income / dependents are typed.
+5. **New form?** Copy a form's `.html` + `data/*-schema.js`, give it a unique `storageKey`, and add a
    card to `index.html`.
+
+### Updating the sliding fee scale
+
+The fee table lives in one place: `feeScale` in `data/ic-schema.js` (`bands` = upper income bound
+per row + the five per-session fees for self / +1 / +2 / +3 / +4 dependents). Both the on-screen
+table and the PDF table are generated from it. Because `index.html` inlines a copy of the schema,
+update the `REG["ic"]` block there too (or back-port the bundle's extras and rebuild with `--force`).
 
 To upgrade jsPDF, drop a new `vendor/jspdf.umd.min.js` in place.

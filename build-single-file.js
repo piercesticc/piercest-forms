@@ -175,9 +175,22 @@ const controller = `
     });
   }
 
+  // Per-form UI hook: a schema may define enhance({root, get}) (e.g. the Initial
+  // Contact fee-scale widget). Runs once after saved values are restored; its
+  // {refresh} is re-run whenever values change without input events (Clear).
+  var enhancers={};
+  function runEnhance(key){
+    var form=REG[key], p=form.__prefix;
+    if(typeof form.enhance!=='function') return;
+    var get=function(id){ return PDF.val(p+id); }; get.radio=function(n){ return PDF.radio(p+n); };
+    try{ enhancers[key]=form.enhance({ root:document.getElementById('view-'+key), get:get })||null; }
+    catch(e){ console.error('enhance() failed for '+key, e); }
+  }
+  function refreshEnhance(key){ var h=enhancers[key]; if(h && typeof h.refresh==='function') h.refresh(); }
+
   function wire(key){
     var p=REG[key].__prefix;
-    applyDefaults(key); load(key); evalConds(key); setupAutoAge(key);
+    applyDefaults(key); load(key); evalConds(key); setupAutoAge(key); runEnhance(key);
     var folderBtn=document.getElementById(p+'folderBtn'), folderLbl=document.getElementById(p+'folderLabel');
     if(folderLbl) folderLbl.textContent=PDF.folderLabel();
     if(folderBtn) folderBtn.addEventListener('click', function(){
@@ -188,7 +201,7 @@ const controller = `
       if(!confirm('Clear all entries on this device? This cannot be undone.')) return;
       fieldsOf(key).forEach(function(el){ if(el.type==='checkbox'||el.type==='radio') el.checked=false; else el.value=''; });
       try{ localStorage.removeItem(storeKey(key)); }catch(e){}
-      applyDefaults(key); evalConds(key); setStatus(key,'Cleared',false);
+      applyDefaults(key); evalConds(key); refreshEnhance(key); setStatus(key,'Cleared',false);
     });
     var pdfBtn=document.getElementById(p+'pdfBtn');
     if(pdfBtn) pdfBtn.addEventListener('click', function(){ exportPDF(key); });

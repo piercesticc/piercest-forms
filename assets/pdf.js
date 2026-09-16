@@ -120,8 +120,28 @@
     const doc = new jsPDF({unit:"pt", format:"letter"});
     const pageW = doc.internal.pageSize.getWidth(), pageH = doc.internal.pageSize.getHeight();
     const M = 54, cw = pageW - M*2, ACC = [58,90,120], WARN = [192,88,79], WARNBG = [251,236,236];
+    const TINT = [238,243,247], HLROW = [255,248,230], GOLD = [217,179,74], GOLDDK = [166,130,36];
     let y = M;
     const need = h => { if(y + h > pageH - 50){ doc.addPage(); y = M; } };
+
+    // tinted box with a colored left bar, bold label, optional body.
+    // (No emoji — jsPDF's built-in Helvetica has no ⚠ glyph.)
+    function calloutBox(label, body, bg, bar, labelColor, bodyColor){
+      doc.setFontSize(10);
+      const bodyLines = body ? doc.splitTextToSize(body, cw - 20) : [];
+      const boxH = 16 + (bodyLines.length ? bodyLines.length*13 + 6 : 4);
+      need(Math.min(boxH, 60) + 6); // keep label + first lines together
+      const top = y - 10;
+      doc.setFillColor(...bg); doc.rect(M, top, cw, boxH, "F");
+      doc.setFillColor(...bar); doc.rect(M, top, 3, boxH, "F");
+      doc.setTextColor(...labelColor); doc.setFont("helvetica","bold");
+      doc.text(label, M+12, y+2); y += 15;
+      if(bodyLines.length){
+        doc.setFont("helvetica","normal"); doc.setTextColor(...bodyColor);
+        bodyLines.forEach(ln => { need(13); doc.text(ln, M+12, y); y += 13; });
+      }
+      doc.setTextColor(40); y += 8;
+    }
 
     // org header
     doc.setTextColor(...ACC); doc.setFont("helvetica","bold"); doc.setFontSize(13);
@@ -144,7 +164,7 @@
 
     items.forEach(it => {
       if(it.type === "section"){
-        need(28); y += 12;
+        need(52); y += 12;   // heading + room for at least one line beneath it
         doc.setFont("helvetica","bold"); doc.setFontSize(10.5); doc.setTextColor(...ACC);
         doc.text(String(it.text).toUpperCase(), M, y);
         doc.setDrawColor(205); doc.setLineWidth(.5); doc.line(M, y+4, pageW-M, y+4);
@@ -165,7 +185,7 @@
         if(it.skipEmpty && !String(it.v || "").trim()) return;
         doc.setFontSize(10);
         const hasLabel = it.k && it.k.trim();
-        need(hasLabel ? 15 : 13);
+        need(hasLabel ? 28 : 13);   // keep a label with its first line
         if(hasLabel){ doc.setFont("helvetica","bold"); doc.text(it.k, M, y); y += 13; }
         doc.setFont("helvetica","normal");
         const lines = doc.splitTextToSize(String(it.v || "—"), cw);
@@ -173,24 +193,78 @@
         y += 5;
 
       } else if(it.type === "flag"){
-        // risk / refer-out callout: tinted box, colored left bar, bold red label.
-        // (No emoji — jsPDF's built-in Helvetica has no ⚠ glyph.)
-        doc.setFontSize(10);
-        const label = "! " + String(it.k || "Flag").toUpperCase();
-        const body = String(it.v || "").trim();
-        const bodyLines = body ? doc.splitTextToSize(body, cw - 20) : [];
-        const boxH = 16 + (bodyLines.length ? bodyLines.length*13 + 6 : 4);
-        need(Math.min(boxH, 60) + 6); // keep label + first lines together
-        const top = y - 10;
-        doc.setFillColor(...WARNBG); doc.rect(M, top, cw, boxH, "F");
-        doc.setFillColor(...WARN); doc.rect(M, top, 3, boxH, "F");
-        doc.setTextColor(...WARN); doc.setFont("helvetica","bold");
-        doc.text(label, M+12, y+2); y += 15;
-        if(bodyLines.length){
-          doc.setFont("helvetica","normal"); doc.setTextColor(110,40,36);
-          bodyLines.forEach(ln => { need(13); doc.text(ln, M+12, y); y += 13; });
+        // risk / refer-out callout: red-tinted box, bold red label
+        calloutBox("! " + String(it.k || "Flag").toUpperCase(), String(it.v || "").trim(), WARNBG, WARN, WARN, [110,40,36]);
+
+      } else if(it.type === "callout"){
+        // informational callout: accent-tinted box (e.g. the fee-scale lookup)
+        calloutBox(String(it.k || "Note").toUpperCase(), String(it.v || "").trim(), TINT, ACC, ACC, [40,40,40]);
+
+      } else if(it.type === "table"){
+        // grid table: {title, head[], rows[][], highlight:{row,col}, legend, note}
+        // Accent header, zebra body, first column left-aligned / others centered.
+        // The highlighted row is tinted and the highlighted cell gets a gold fill + ring.
+        // Kept on one page when it fits; otherwise breaks with the header repeated.
+        const head = it.head || [], rows = it.rows || [], nCol = head.length;
+        const fs = 9, rh = 15, padL = 6;
+        const firstW = Math.round(cw * 0.34), otherW = (cw - firstW) / Math.max(1, nCol - 1);
+        const colX = i => M + (i === 0 ? 0 : firstW + (i-1)*otherW);
+        const colW = i => i === 0 ? firstW : otherW;
+        const hl = it.highlight || {};
+        const cellText = (txt, ci, bottom) => {
+          if(ci === 0) doc.text(String(txt), colX(0) + padL, bottom);
+          else doc.text(String(txt), colX(ci) + colW(ci)/2, bottom, {align:"center"});
+        };
+        const drawHead = () => {
+          doc.setFillColor(...ACC); doc.rect(M, y, cw, rh, "F");
+          doc.setFont("helvetica","bold"); doc.setFontSize(fs); doc.setTextColor(255);
+          head.forEach((h, i) => cellText(h, i, y + rh - 5));
+          y += rh;
+        };
+        const titleH = it.title ? 16 : 0, legendH = it.legend ? 14 : 0;
+        const noteLines = it.note ? doc.splitTextToSize(String(it.note), cw) : [];
+        const totalH = titleH + rh*(rows.length + 1) + legendH + noteLines.length*11 + 12;
+        y += 4;
+        if(totalH <= pageH - M - 50) need(totalH); else need(titleH + rh*3);
+        if(it.title){
+          doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(...ACC);
+          doc.text(String(it.title), M, y); y += 12;
         }
-        doc.setTextColor(40); y += 8;
+        drawHead();
+        rows.forEach((r, ri) => {
+          if(y + rh > pageH - 50){ doc.addPage(); y = M; drawHead(); }
+          const isRow = hl.row === ri;
+          if(isRow){ doc.setFillColor(...HLROW); doc.rect(M, y, cw, rh, "F"); }
+          else if(ri % 2 === 1){ doc.setFillColor(...TINT); doc.rect(M, y, cw, rh, "F"); }
+          let hit = -1;
+          r.forEach((cell, ci) => {
+            const isHit = isRow && hl.col === ci;
+            if(isHit){ hit = ci; doc.setFillColor(...GOLD); doc.rect(colX(ci), y, colW(ci), rh, "F"); }
+            doc.setFont("helvetica", (isHit || (isRow && ci === 0)) ? "bold" : "normal"); doc.setFontSize(fs);
+            doc.setTextColor(...(isHit ? [40,32,5] : [40,40,40]));
+            cellText(cell, ci, y + rh - 5);
+          });
+          // grid: light row rule + column separators; outer edges slightly darker
+          doc.setDrawColor(210); doc.setLineWidth(.4);
+          doc.line(M, y + rh, pageW - M, y + rh);
+          for(let i = 1; i < nCol; i++) doc.line(colX(i), y, colX(i), y + rh);
+          doc.setDrawColor(170); doc.line(M, y, M, y + rh); doc.line(pageW - M, y, pageW - M, y + rh);
+          if(hit >= 0){ doc.setDrawColor(...GOLDDK); doc.setLineWidth(1.2); doc.rect(colX(hit) + .6, y + .6, colW(hit) - 1.2, rh - 1.2, "S"); }
+          y += rh;
+        });
+        y += 8;
+        if(it.legend){
+          need(14);
+          doc.setFillColor(...GOLD); doc.rect(M, y - 7, 9, 9, "F");
+          doc.setDrawColor(...GOLDDK); doc.setLineWidth(.8); doc.rect(M + .4, y - 6.6, 8.2, 8.2, "S");
+          doc.setFont("helvetica","normal"); doc.setFontSize(8.5); doc.setTextColor(90);
+          doc.text(String(it.legend), M + 14, y); y += 13;
+        }
+        if(noteLines.length){
+          doc.setFont("helvetica","italic"); doc.setFontSize(8.5); doc.setTextColor(100);
+          noteLines.forEach(ln => { need(11); doc.text(ln, M, y); y += 11; });
+        }
+        doc.setTextColor(40); doc.setLineWidth(.5); y += 6;
 
       } else if(it.type === "sig"){
         need(46); y += 22; const colW = (cw - 30)/2;

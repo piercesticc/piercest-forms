@@ -6,6 +6,7 @@
      • data-show-when="triggerName:val1,val2" conditional reveals
      • data-default="today" date prefill
      • Set-folder button + Save-as-PDF export via window.FORM.build()
+     • optional window.FORM.enhance({root,get}) hook for per-form UI
    All form-specific logic lives in data/<form>-schema.js as
    window.FORM. This file contains no per-form knowledge.
    ============================================================ */
@@ -20,6 +21,18 @@
 
   const fields = () => Array.prototype.slice.call(document.querySelectorAll("[data-field]"));
   const statusEl = () => $("status");
+
+  // ---------- per-form UI hook ----------
+  // A schema may define enhance({root, get}) for form-specific UI (e.g. the fee-scale
+  // widget). It runs once after saved values are restored and may return {refresh},
+  // which we call whenever values change without input events (Clear, draft load).
+  let enhancer = null;
+  function runEnhance(){
+    if(typeof FORM.enhance !== "function") return;
+    try{ enhancer = FORM.enhance({ root:document, get:PDF.get }) || null; }
+    catch(e){ console.error("enhance() failed", e); }
+  }
+  function refreshEnhance(){ if(enhancer && typeof enhancer.refresh === "function") enhancer.refresh(); }
 
   // ---------- status ----------
   let statusTimer = null;
@@ -140,6 +153,7 @@
     try{ localStorage.setItem(KEY, JSON.stringify(collect())); }catch(e){}
     flash("Draft loaded");
     evalConditionals();
+    refreshEnhance();
   }
   function renderDraftsPanel(){
     let panel = document.getElementById('draftsPanel');
@@ -277,6 +291,7 @@
     load();
     evalConditionals();
     setupAutoAge();
+    runEnhance();
 
     // autosave + live conditional evaluation
     document.addEventListener("input", e => {
@@ -307,6 +322,7 @@
       setActiveId(null);
       applyDefaults();
       evalConditionals();
+      refreshEnhance();
       flash('Cleared', false);
     }));
 
