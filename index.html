@@ -395,6 +395,7 @@ button{
   <section class="card">
     <div class="step"><span class="stepnum">3</span><h2>Demographic Information <span style="font-weight:400;color:var(--muted);font-size:14px;">(optional)</span></h2></div>
     <div class="prompt q">"These questions help give us a better sense of your identity." — all optional.</div>
+    <h3 data-show-when="ic-q_type:Couple" hidden style="margin:22px 0 6px;">Partner A</h3>
     <div class="two">
       <div class="field-block"><label class="lab">Birthdate</label><input type="text" class="sm" id="ic-d_birth" data-field placeholder="MM/DD/YYYY"></div>
       <div class="field-block"><label class="lab">Age</label><input type="text" class="sm" id="ic-d_age" data-field data-age-of="ic-d_birth"></div>
@@ -415,19 +416,39 @@ button{
         <label><input type="radio" name="ic-e_soft" value="Yes" data-field><span>Yes</span></label>
       </div>
     </div>
+    <div class="reveal" data-show-when="ic-q_type:Couple" hidden>
+      <h3 style="margin-top:0;">Partner B</h3>
+      <div class="two">
+        <div class="field-block"><label class="lab">Birthdate</label><input type="text" class="sm" id="ic-d_birth_b" data-field placeholder="MM/DD/YYYY"></div>
+        <div class="field-block"><label class="lab">Age</label><input type="text" class="sm" id="ic-d_age_b" data-field data-age-of="ic-d_birth_b"></div>
+        <div class="field-block"><label class="lab">Ethnicity</label><input type="text" class="sm" id="ic-d_ethnicity_b" data-field></div>
+        <div class="field-block"><label class="lab">Pronouns</label><input type="text" class="sm" id="ic-d_pronouns_b" data-field></div>
+        <div class="field-block"><label class="lab">Sexual orientation</label><input type="text" class="sm" id="ic-d_orientation_b" data-field></div>
+        <div class="field-block"><label class="lab">Relationship status</label><input type="text" class="sm" id="ic-d_relstatus_b" data-field></div>
+      </div>
+      <label class="lab">Emergency contact</label>
+      <div class="rowset"><div class="prow">
+        <input type="text" id="ic-e_name_b" data-field placeholder="Name">
+        <input type="text" id="ic-e_rel_b" data-field placeholder="Relationship">
+        <input type="text" id="ic-e_phone_b" data-field placeholder="Phone">
+      </div></div>
+      <div class="field-block" style="margin-bottom:0;"><label class="lab">Does this person have an accent or is soft-spoken?</label>
+        <div class="radiorow">
+          <label><input type="radio" name="ic-e_soft_b" value="No" data-field><span>No</span></label>
+          <label><input type="radio" name="ic-e_soft_b" value="Yes" data-field><span>Yes</span></label>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ============ SCREENING ============ -->
   <section class="card">
     <div class="step"><span class="stepnum">4</span><h2>Screening Questions</h2></div>
+    <h3 data-show-when="ic-q_type:Couple" hidden style="margin:22px 0 6px;">Partner A</h3>
     <div class="field-block"><label class="lab">Have you been in therapy before? What worked / what didn't?</label>
       <textarea class="lg" id="ic-s_prior" data-field></textarea></div>
     <div class="field-block"><label class="lab">What brings you in? Why are you seeking counseling services?</label>
       <textarea class="lg" id="ic-s_bringsin" data-field></textarea></div>
-    <div class="reveal" data-show-when="ic-q_type:Couple" hidden>
-      <div class="field-block" style="margin:0;"><label class="lab">For couples — do disagreements ever become physical?</label>
-        <textarea class="sm" id="ic-s_conflict" data-field></textarea></div>
-    </div>
     <div class="field-block"><label class="lab">Currently prescribed any psychiatric medications?</label>
       <div class="radiorow">
         <label><input type="radio" name="ic-q_meds" value="No" data-field><span>No</span></label>
@@ -438,6 +459,27 @@ button{
     </div>
     <div class="field-block"><label class="lab">Do you use any other substances? Which, how often, how much, and why?</label>
       <textarea class="lg" id="ic-s_substances" data-field></textarea></div>
+    <div class="reveal" data-show-when="ic-q_type:Couple" hidden>
+      <h3 style="margin-top:0;">Partner B</h3>
+      <div class="field-block"><label class="lab">Have you been in therapy before? What worked / what didn't?</label>
+        <textarea class="lg" id="ic-s_prior_b" data-field></textarea></div>
+      <div class="field-block"><label class="lab">What brings you in? Why are you seeking counseling services?</label>
+        <textarea class="lg" id="ic-s_bringsin_b" data-field></textarea></div>
+      <div class="field-block"><label class="lab">Currently prescribed any psychiatric medications?</label>
+        <div class="radiorow">
+          <label><input type="radio" name="ic-q_meds_b" value="No" data-field><span>No</span></label>
+          <label><input type="radio" name="ic-q_meds_b" value="Yes" data-field><span>Yes</span></label>
+        </div>
+        <div data-show-when="ic-q_meds_b:Yes" hidden style="margin-top:8px;">
+          <input type="text" class="sm" id="ic-s_meds_detail_b" data-field placeholder="Which medications / prescriber"></div>
+      </div>
+      <div class="field-block" style="margin-bottom:0;"><label class="lab">Do you use any other substances? Which, how often, how much, and why?</label>
+        <textarea class="lg" id="ic-s_substances_b" data-field></textarea></div>
+    </div>
+    <div class="reveal" data-show-when="ic-q_type:Couple" hidden>
+      <div class="field-block" style="margin:0;"><label class="lab">For couples — do disagreements ever become physical?</label>
+        <textarea class="sm" id="ic-s_conflict" data-field></textarea></div>
+    </div>
   </section>
 
   <!-- ============ SUICIDALITY ============ -->
@@ -445,6 +487,7 @@ button{
     <div class="step"><span class="stepnum">5</span><h2>Suicidality</h2></div>
     <div class="prompt q">Optional transition: "Next, we're going to transition into talking about suicidality. This topic can be vulnerable, so feel free to take it at your own pace."</div>
 
+    <h3 data-show-when="ic-q_type:Couple" hidden style="margin:22px 0 6px;">Partner A</h3>
     <div class="field-block"><label class="lab">Are you currently feeling suicidal?</label>
       <div class="radiorow">
         <label><input type="radio" name="ic-q_si_current" value="No" data-field><span>No</span></label>
@@ -467,6 +510,31 @@ button{
       <label class="lab">Context — ideation, plan, means, time</label>
       <div class="prompt q">"Would you be open to sharing what that was like?" · thoughts of harming self/others? · suicide as a way to deal with unbearable stress? · a plan? · the means to carry it out? a time?</div>
       <textarea class="lg" id="ic-s_si_context" data-field></textarea>
+    </div>
+
+    <div class="reveal" data-show-when="ic-q_type:Couple" hidden>
+      <h3 style="margin-top:0;">Partner B</h3>
+      <div class="field-block"><label class="lab">Are you currently feeling suicidal?</label>
+        <div class="radiorow">
+          <label><input type="radio" name="ic-q_si_current_b" value="No" data-field><span>No</span></label>
+          <label><input type="radio" name="ic-q_si_current_b" value="Yes" data-field><span>Yes</span></label>
+        </div>
+        <div class="warn big" data-show-when="ic-q_si_current_b:Yes" hidden>
+          <b>⚠ Provide crisis resources now.</b> Suicide &amp; Crisis Lifeline <b>988</b> · SF Suicide Prevention <b>(415) 781-0500</b>.
+          After the call, contact Director <b>Lisa Garbus (415) 279-4079</b>. See the crisis protocol below.
+        </div>
+      </div>
+      <div class="field-block"><label class="lab">Have you felt suicidal in the past?</label>
+        <div class="radiorow">
+          <label><input type="radio" name="ic-q_si_past_b" value="No" data-field><span>No</span></label>
+          <label><input type="radio" name="ic-q_si_past_b" value="Yes" data-field><span>Yes</span></label>
+        </div>
+      </div>
+      <div data-show-when="ic-q_si_current_b:Yes;ic-q_si_past_b:Yes" hidden>
+        <label class="lab">Context — ideation, plan, means, time</label>
+        <div class="prompt q">"Would you be open to sharing what that was like?" · thoughts of harming self/others? · suicide as a way to deal with unbearable stress? · a plan? · the means to carry it out? a time?</div>
+        <textarea class="lg" id="ic-s_si_context_b" data-field></textarea>
+      </div>
     </div>
 
     <div class="prompt q">Brief care before finances: "We've wrapped up that section. Before we move to finances and wrapping up — is there anything else that feels important to share?"</div>
@@ -2095,31 +2163,46 @@ REG["ic"] = {
       P("Family structure", get("c_family_structure"));
     }
 
+    // Couples answer demographics / screening / suicidality per partner: Partner A
+    // uses the original ids, Partner B the same ids with a "_b" suffix. Labels carry
+    // the participant name when one was entered.
+    const couple = r("q_type") === "Couple";
+    const partners = couple
+      ? [["", "Partner A", get("p1_name")], ["_b", "Partner B", get("p2_name")]]
+          .map(([sfx, tag, nm]) => [sfx, tag + (nm ? ` (${nm})` : "") + ": "])
+      : [["", ""]];
+
     S("Demographics (optional)");
-    F("Age", get("d_age"));
-    F("Birthdate", get("d_birth"));
-    F("Ethnicity", get("d_ethnicity"));
-    F("Pronouns", get("d_pronouns"));
-    F("Sexual orientation", get("d_orientation"));
-    F("Relationship status", get("d_relstatus"));
-    F("Emergency contact", [get("e_name"), get("e_rel"), get("e_phone")].filter(Boolean).join(" · ") || "");
-    F("Emergency contact accent / soft-spoken", r("e_soft"));
+    for(const [sfx, who] of partners){
+      F(who + "Age", get("d_age"+sfx));
+      F(who + "Birthdate", get("d_birth"+sfx));
+      F(who + "Ethnicity", get("d_ethnicity"+sfx));
+      F(who + "Pronouns", get("d_pronouns"+sfx));
+      F(who + "Sexual orientation", get("d_orientation"+sfx));
+      F(who + "Relationship status", get("d_relstatus"+sfx));
+      F(who + "Emergency contact", [get("e_name"+sfx), get("e_rel"+sfx), get("e_phone"+sfx)].filter(Boolean).join(" · ") || "");
+      F(who + "Emergency contact accent / soft-spoken", r("e_soft"+sfx));
+    }
 
     S("Screening");
-    P("Prior therapy — what worked / what didn't", get("s_prior"));
-    P("What brings them in", get("s_bringsin"));
-    if(r("q_type") === "Couple") P("Do disagreements become physical?", get("s_conflict"));
-    F("Currently prescribed psychiatric meds", r("q_meds") + (get("s_meds_detail") ? ` — ${get("s_meds_detail")}` : ""));
-    P("Other substances — which / how often / how much / why", get("s_substances"));
+    for(const [sfx, who] of partners){
+      P(who + "Prior therapy — what worked / what didn't", get("s_prior"+sfx));
+      P(who + "What brings them in", get("s_bringsin"+sfx));
+      F(who + "Currently prescribed psychiatric meds", r("q_meds"+sfx) + (get("s_meds_detail"+sfx) ? ` — ${get("s_meds_detail"+sfx)}` : ""));
+      P(who + "Other substances — which / how often / how much / why", get("s_substances"+sfx));
+    }
+    if(couple) P("Do disagreements become physical?", get("s_conflict"));
 
     S("Suicidality / Risk");
-    F("Currently feeling suicidal", r("q_si_current"));
-    F("Felt suicidal in the past", r("q_si_past"));
-    if(r("q_si_current") === "Yes"){
-      FLAG("Currently suicidal", "Crisis resources provided (988 · SF Suicide Prevention 415-781-0500). After the call, contact Director Lisa Garbus, 415-279-4079.");
-    }
-    if(r("q_si_current") === "Yes" || r("q_si_past") === "Yes"){
-      it.push({ type:"para", k:"Context — ideation / plan / means / time", v:get("s_si_context") });
+    for(const [sfx, who] of partners){
+      F(who + "Currently feeling suicidal", r("q_si_current"+sfx));
+      F(who + "Felt suicidal in the past", r("q_si_past"+sfx));
+      if(r("q_si_current"+sfx) === "Yes"){
+        FLAG(who + "Currently suicidal", "Crisis resources provided (988 · SF Suicide Prevention 415-781-0500). After the call, contact Director Lisa Garbus, 415-279-4079.");
+      }
+      if(r("q_si_current"+sfx) === "Yes" || r("q_si_past"+sfx) === "Yes"){
+        it.push({ type:"para", k:who + "Context — ideation / plan / means / time", v:get("s_si_context"+sfx) });
+      }
     }
     P("Anything else important to share", get("s_anything"));
 

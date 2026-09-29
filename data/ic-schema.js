@@ -185,31 +185,46 @@ window.FORM = {
       P("Family structure", get("c_family_structure"));
     }
 
+    // Couples answer demographics / screening / suicidality per partner: Partner A
+    // uses the original ids, Partner B the same ids with a "_b" suffix. Labels carry
+    // the participant name when one was entered.
+    const couple = r("q_type") === "Couple";
+    const partners = couple
+      ? [["", "Partner A", get("p1_name")], ["_b", "Partner B", get("p2_name")]]
+          .map(([sfx, tag, nm]) => [sfx, tag + (nm ? ` (${nm})` : "") + ": "])
+      : [["", ""]];
+
     S("Demographics (optional)");
-    F("Age", get("d_age"));
-    F("Birthdate", get("d_birth"));
-    F("Ethnicity", get("d_ethnicity"));
-    F("Pronouns", get("d_pronouns"));
-    F("Sexual orientation", get("d_orientation"));
-    F("Relationship status", get("d_relstatus"));
-    F("Emergency contact", [get("e_name"), get("e_rel"), get("e_phone")].filter(Boolean).join(" · ") || "");
-    F("Emergency contact accent / soft-spoken", r("e_soft"));
+    for(const [sfx, who] of partners){
+      F(who + "Age", get("d_age"+sfx));
+      F(who + "Birthdate", get("d_birth"+sfx));
+      F(who + "Ethnicity", get("d_ethnicity"+sfx));
+      F(who + "Pronouns", get("d_pronouns"+sfx));
+      F(who + "Sexual orientation", get("d_orientation"+sfx));
+      F(who + "Relationship status", get("d_relstatus"+sfx));
+      F(who + "Emergency contact", [get("e_name"+sfx), get("e_rel"+sfx), get("e_phone"+sfx)].filter(Boolean).join(" · ") || "");
+      F(who + "Emergency contact accent / soft-spoken", r("e_soft"+sfx));
+    }
 
     S("Screening");
-    P("Prior therapy — what worked / what didn't", get("s_prior"));
-    P("What brings them in", get("s_bringsin"));
-    if(r("q_type") === "Couple") P("Do disagreements become physical?", get("s_conflict"));
-    F("Currently prescribed psychiatric meds", r("q_meds") + (get("s_meds_detail") ? ` — ${get("s_meds_detail")}` : ""));
-    P("Other substances — which / how often / how much / why", get("s_substances"));
+    for(const [sfx, who] of partners){
+      P(who + "Prior therapy — what worked / what didn't", get("s_prior"+sfx));
+      P(who + "What brings them in", get("s_bringsin"+sfx));
+      F(who + "Currently prescribed psychiatric meds", r("q_meds"+sfx) + (get("s_meds_detail"+sfx) ? ` — ${get("s_meds_detail"+sfx)}` : ""));
+      P(who + "Other substances — which / how often / how much / why", get("s_substances"+sfx));
+    }
+    if(couple) P("Do disagreements become physical?", get("s_conflict"));
 
     S("Suicidality / Risk");
-    F("Currently feeling suicidal", r("q_si_current"));
-    F("Felt suicidal in the past", r("q_si_past"));
-    if(r("q_si_current") === "Yes"){
-      FLAG("Currently suicidal", "Crisis resources provided (988 · SF Suicide Prevention 415-781-0500). After the call, contact Director Lisa Garbus, 415-279-4079.");
-    }
-    if(r("q_si_current") === "Yes" || r("q_si_past") === "Yes"){
-      it.push({ type:"para", k:"Context — ideation / plan / means / time", v:get("s_si_context") });
+    for(const [sfx, who] of partners){
+      F(who + "Currently feeling suicidal", r("q_si_current"+sfx));
+      F(who + "Felt suicidal in the past", r("q_si_past"+sfx));
+      if(r("q_si_current"+sfx) === "Yes"){
+        FLAG(who + "Currently suicidal", "Crisis resources provided (988 · SF Suicide Prevention 415-781-0500). After the call, contact Director Lisa Garbus, 415-279-4079.");
+      }
+      if(r("q_si_current"+sfx) === "Yes" || r("q_si_past"+sfx) === "Yes"){
+        it.push({ type:"para", k:who + "Context — ideation / plan / means / time", v:get("s_si_context"+sfx) });
+      }
     }
     P("Anything else important to share", get("s_anything"));
 
