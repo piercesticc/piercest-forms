@@ -1,8 +1,11 @@
 # Pierce St ICC Forms App
 
-A small, shareable web app for Integral Counseling Center (Pierce Street) that lets any staff
-member fill out a clinic form and download a clean, letterheaded **PDF** to their own computer —
-ready to upload to Ensora or SharePoint.
+A small web app for Integral Counseling Center (Pierce Street) that lets any staff member fill out
+a clinic form and download a clean, letterheaded **PDF** to their own computer — ready to upload to
+Ensora or SharePoint.
+
+**Live at https://piercesticchub.org/forms/**, behind the clinic hub's shared password. That is the
+only address. To publish a change, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 **Four forms:**
 - **Initial Contact Form** — phone-shift screening call
@@ -23,16 +26,6 @@ person uploads it wherever it needs to go. Entries autosave only in that browser
 
 Because the app only ever serves *blank* code, hosting it is PHI-safe.
 
-## Two ways to distribute
-
-1. **Email one file (simplest).** Send **`PierceStForms.html`** — a single self-contained file with
-   every form, style, and the PDF library baked in. Staff save it and double-click to open. No other
-   files needed. To regenerate it after any edit: `node build-single-file.js`.
-2. **Host the folder (best for updates).** Deploy the whole folder to a private static URL so
-   everyone uses one link and your edits propagate (see below). Use `index.html` as the entry point.
-
-Either way, no client data ever leaves the person's device.
-
 ## Browser & OS support
 
 Works on **Mac and Windows** in **Chrome, Edge, Firefox, and Safari**. The essential flow — fill a
@@ -43,51 +36,21 @@ same PDF, same filename.
 
 ## Run it locally (no install)
 
-Open `PierceStForms.html` (single file) or `index.html` (folder) in any browser. That's it.
-
-## Where it lives now: the Pierce St clinic hub
-
-Since 16 September 2026 the canonical address is **https://piercesticchub.org/forms/**, behind
-the clinic's shared password. The hub's release build (`pierce-hub/build.py --launch --static`)
-copies this folder's `index.html` to `/forms/` and deploys it with the rest of the hub, so:
-
-1. Edit here as usual (`index.html` is the shipped single file — see the guard in
-   `build-single-file.js`).
-2. Push to `main`, then run the hub's deploy workflow — see `DEPLOYMENT.md` for the one command.
-   A push here alone does not update the hub.
-
-Drafts autosave per browser origin, so anything in progress on the old GitHub Pages address does
-not carry over — export it as a PDF there first. GitHub Pages stays up as a fallback until it is
-switched off in the repo settings.
-
-## Other ways to host it
-
-The app is plain static files, so any static host works. One-time setup, then everyone uses one link
-and your updates appear for all.
-
-**GitHub Pages** (the previous home)
-1. Create a private repo, add these files, push.
-2. Settings → Pages → deploy from branch (`main`, `/root`).
-3. Share the resulting `https://…github.io/…/` link with staff.
-
-**Netlify (drag-and-drop)**
-1. Go to Netlify → "Add new site" → "Deploy manually".
-2. Drag the whole `pierce-icc-forms` folder onto the page.
-3. Share the site URL. To update, drag the folder again.
-
-Either way the host serves static files only and never receives form data.
+Open `index.html` in any browser. That is the whole app, exactly as the hub serves it.
 
 ## Project layout
 
 ```
-index.html              landing screen (choose a form)
+index.html              THE APP. One self-contained file: every form, the styles, jsPDF, the PDF
+                        engine, all four schemas, the drafts module, the intake chooser and the
+                        prompts toggle. This is the only file the hub ships.
 initial-contact.html    ┐
-intake.html             │ one page per form
-couple.html             │  (static markup + [data-field] inputs)
-family.html             ┘
+intake.html             │ per-form source pages — the same form markup without the "ic-"/"in-"/
+couple.html             │ "co-"/"fa-" id prefixes index.html uses. Each opens on its own for
+family.html             ┘ testing one form in isolation.
 assets/
-  clinic.css            shared design system (all styling lives here)
-  pdf.js                shared PDF engine: buildDoc() block types, slug, saveBlob
+  clinic.css            shared design system
+  pdf.js                shared PDF engine: buildDoc() block types, slug, filenames, saveBlob
   forms.js              shared engine: autosave, Clear, data-show-when conditionals, export
 data/
   ic-schema.js          ┐ per-form data: storage key, meta, filename, and build() which
@@ -98,8 +61,11 @@ vendor/
   jspdf.umd.min.js      bundled PDF library (v2.5.1)
 ```
 
-Each form page loads `clinic.css`, `vendor/jspdf.umd.min.js`, `assets/pdf.js`, its
-`data/<form>-schema.js`, and `assets/forms.js`.
+**`index.html` carries its own inlined copies** of the CSS, `pdf.js`, `forms.js` (extended) and
+every schema. There is no build step that regenerates it: an edit to a form, a schema or an engine
+file has to be made **in `index.html` too** — inside that form's `<section class="view"
+id="view-…">`, with the form's id prefix, or in the `REG["…"]` block for a schema. Keep the source
+files in step with it so the two never disagree.
 
 ## PDF filename convention
 
@@ -117,8 +83,9 @@ and the date falls back to today — a PDF always gets a sane filename.
    it automatically). Use `data-default="today"` on a date input to prefill today.
 2. **Conditionals:** add `data-show-when="triggerName:value1,value2"` to any block to reveal it only
    when that radio/select/checkbox matches. Multiple OR conditions: separate with `;`
-   (e.g. `data-show-when="q_si_current:Yes;q_si_past:Yes"`).
-3. **Add it to the PDF** in the form's `data/<form>-schema.js` using the helpers in `build()`:
+   (e.g. `data-show-when="q_si_current:Yes;q_si_past:Yes"`). In `index.html` the trigger names carry
+   the form's prefix (`ic-q_si_current`).
+3. **Add it to the PDF** in the form's schema using the helpers in `build()`:
    `S("Section")`, `F("Label", get("id"))` for a short field, `P("Label","id")` for a narrative
    block, `it.push({type:"flag", k, v})` for a highlighted risk/refer-out callout,
    `it.push({type:"callout", k, v})` for a neutral (accent-tinted) note,
@@ -128,14 +95,17 @@ and the date falls back to today — a PDF always gets a sane filename.
    after saved values are restored; it may return `{refresh}`, which is re-run after Clear or a
    draft load. The Initial Contact form uses this to render the fee scale into `[data-fee-scale]`
    and light up the matching band as income / dependents are typed.
-5. **New form?** Copy a form's `.html` + `data/*-schema.js`, give it a unique `storageKey`, and add a
-   card to `index.html`.
+5. **Couples on the Initial Contact form:** questions asked of each partner use the base id for
+   Partner A and the same id with a `_b` suffix for Partner B, shown only when the type of therapy
+   is Couple. The PDF loops over both partners.
+6. **Make every change in `index.html` as well** (see *Project layout*), then publish per
+   `DEPLOYMENT.md`.
 
 ### Updating the sliding fee scale
 
-The fee table lives in one place: `feeScale` in `data/ic-schema.js` (`bands` = upper income bound
-per row + the five per-session fees for self / +1 / +2 / +3 / +4 dependents). Both the on-screen
-table and the PDF table are generated from it. Because `index.html` inlines a copy of the schema,
-update the `REG["ic"]` block there too (or back-port the bundle's extras and rebuild with `--force`).
+The fee table lives in `feeScale` in `data/ic-schema.js` (`bands` = upper income bound per row + the
+five per-session fees for self / +1 / +2 / +3 / +4 dependents). Both the on-screen table and the PDF
+table are generated from it. Update the `REG["ic"]` block in `index.html` to match, and the hub's
+`/sliding-fee-scale/` page, which is checked cell by cell against it.
 
-To upgrade jsPDF, drop a new `vendor/jspdf.umd.min.js` in place.
+To upgrade jsPDF, replace `vendor/jspdf.umd.min.js` and the copy inlined in `index.html`.
