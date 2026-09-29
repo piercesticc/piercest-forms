@@ -45,12 +45,27 @@ same PDF, same filename.
 
 Open `PierceStForms.html` (single file) or `index.html` (folder) in any browser. That's it.
 
-## Share it with the clinic (recommended: private static host)
+## Where it lives now: the Pierce St clinic hub
+
+Since 16 September 2026 the canonical address is **https://piercesticchub.org/forms/**, behind
+the clinic's shared password. The hub's release build (`pierce-hub/build.py --launch --static`)
+copies this folder's `index.html` to `/forms/` and deploys it with the rest of the hub, so:
+
+1. Edit here as usual (`index.html` is the shipped single file — see the guard in
+   `build-single-file.js`).
+2. Push to `main`, then run the hub's deploy workflow — see `DEPLOYMENT.md` for the one command.
+   A push here alone does not update the hub.
+
+Drafts autosave per browser origin, so anything in progress on the old GitHub Pages address does
+not carry over — export it as a PDF there first. GitHub Pages stays up as a fallback until it is
+switched off in the repo settings.
+
+## Other ways to host it
 
 The app is plain static files, so any static host works. One-time setup, then everyone uses one link
 and your updates appear for all.
 
-**GitHub Pages**
+**GitHub Pages** (the previous home)
 1. Create a private repo, add these files, push.
 2. Settings → Pages → deploy from branch (`main`, `/root`).
 3. Share the resulting `https://…github.io/…/` link with staff.
@@ -88,8 +103,9 @@ Each form page loads `clinic.css`, `vendor/jspdf.umd.min.js`, `assets/pdf.js`, i
 
 ## PDF filename convention
 
-- Contact / Couple / Family: `Initials_Date_<FormType>.pdf` (e.g. `AZ_2026-07-16_InitialContact.pdf`)
-  matching the clinic's "initials + date" convention.
+- Initial Contact: `Initials M.D.YY.pdf` (e.g. `AZ 9.15.23.pdf`) — exactly the filing name the Phone
+  Shift Manual asks for, so nothing needs renaming before it goes in the IC folder.
+- Couple / Family: `Initials_Date_<FormType>.pdf` (e.g. `AZ_2026-07-16_CoupleIntake.pdf`).
 - Individual Intake: `Name_Date_Intake.pdf`.
 
 Initials/name and date come from the header fields; if a name is missing it falls back to `client`,

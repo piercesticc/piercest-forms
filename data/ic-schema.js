@@ -1,6 +1,6 @@
 /* ============================================================
    Initial Contact Form — schema (data only)
-   window.FORM: storage key, meta, filename (Initials_Date), the
+   window.FORM: storage key, meta, filename ("AZ 9.15.23"), the
    sliding fee scale (+ lookup helpers and the enhance() UI hook),
    and build() → jsPDF doc. Conditional sections appear only when
    relevant; risk / refer-out content renders as flag blocks.
@@ -8,7 +8,8 @@
 window.FORM = {
   storageKey: "icc_contact_v1",
   filenameSuffix: "InitialContact",
-  filenameId: "initials",             // clinic convention, e.g. AZ_2026-07-16
+  filenameId: "initials",
+  filenameStyle: "clinic-ic",         // the manual's filing name: "AZ 9.15.23.pdf"
   meta: { nameId: "f_client", dateId: "f_date", roleId: "f_staff" },
 
   // Sliding fee scale — the single source of truth for both the on-screen table and

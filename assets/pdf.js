@@ -73,7 +73,15 @@
     const who = mode === "initials" ? (initials() || nameSlug()) : nameSlug();
     return `${who}_${dateSlug()}`;
   }
+  // The clinic files an IC as initials, a space, and the date written M.D.YY --
+  // "AZ 9.15.23" in the Phone Shift Manual, "AZ 1.1.26" on the IC form itself.
+  function clinicDate(){
+    const d = parseDOB(dateRaw()) || new Date();
+    return `${d.getMonth()+1}.${d.getDate()}.${String(d.getFullYear()).slice(-2)}`;
+  }
   function pdfFilename(){
+    if(window.FORM && window.FORM.filenameStyle === "clinic-ic")
+      return `${initials() || nameSlug()} ${clinicDate()}.pdf`;
     const suffix = (window.FORM && window.FORM.filenameSuffix) || "Form";
     return `${slug()}_${suffix}.pdf`;
   }
@@ -83,7 +91,7 @@
   function hasDirPicker(){ return typeof window.showDirectoryPicker === "function"; }
   async function pickFolder(){
     if(!hasDirPicker()){
-      alert("Automatic folder saving needs Chrome or Edge.\n\nIn other browsers the PDF simply downloads to your Downloads folder with the Initials_Date filename — you can then upload it wherever it needs to go.");
+      alert("Automatic folder saving needs Chrome or Edge.\n\nIn other browsers the PDF simply downloads to your Downloads folder named for the client and the date — you can then upload it wherever it needs to go.");
       return false;
     }
     try{ baseDir = await window.showDirectoryPicker({mode:"readwrite"}); return true; }

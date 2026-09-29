@@ -1675,7 +1675,15 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     const who = mode === "initials" ? (initials() || nameSlug()) : nameSlug();
     return `${who}_${dateSlug()}`;
   }
+  // The clinic files an IC as initials, a space, and the date written M.D.YY --
+  // "AZ 9.15.23" in the Phone Shift Manual, "AZ 1.1.26" on the IC form itself.
+  function clinicDate(){
+    const d = parseDOB(dateRaw()) || new Date();
+    return `${d.getMonth()+1}.${d.getDate()}.${String(d.getFullYear()).slice(-2)}`;
+  }
   function pdfFilename(){
+    if(window.FORM && window.FORM.filenameStyle === "clinic-ic")
+      return `${initials() || nameSlug()} ${clinicDate()}.pdf`;
     const suffix = (window.FORM && window.FORM.filenameSuffix) || "Form";
     return `${slug()}_${suffix}.pdf`;
   }
@@ -1685,7 +1693,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   function hasDirPicker(){ return typeof window.showDirectoryPicker === "function"; }
   async function pickFolder(){
     if(!hasDirPicker()){
-      alert("Automatic folder saving needs Chrome or Edge.\n\nIn other browsers the PDF simply downloads to your Downloads folder with the Initials_Date filename — you can then upload it wherever it needs to go.");
+      alert("Automatic folder saving needs Chrome or Edge.\n\nIn other browsers the PDF simply downloads to your Downloads folder named for the client and the date — you can then upload it wherever it needs to go.");
       return false;
     }
     try{ baseDir = await window.showDirectoryPicker({mode:"readwrite"}); return true; }
@@ -1693,7 +1701,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   }
   async function pickFolder(){
     if(!hasDirPicker()){
-      alert("Automatic folder saving needs Chrome or Edge.\n\nIn other browsers the PDF simply downloads to your Downloads folder with the Initials_Date filename — you can then upload it wherever it needs to go.");
+      alert("Automatic folder saving needs Chrome or Edge.\n\nIn other browsers the PDF simply downloads to your Downloads folder named for the client and the date — you can then upload it wherever it needs to go.");
       return false;
     }
     try{ baseDir = await window.showDirectoryPicker({mode:"readwrite"});
@@ -1730,7 +1738,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   }
   async function pickFolder(){
     if(!hasDirPicker()){
-      alert("Automatic folder saving needs Chrome or Edge.\n\nIn other browsers the PDF simply downloads to your Downloads folder with the Initials_Date filename — you can then upload it wherever it needs to go.");
+      alert("Automatic folder saving needs Chrome or Edge.\n\nIn other browsers the PDF simply downloads to your Downloads folder named for the client and the date — you can then upload it wherever it needs to go.");
       return false;
     }
     try{
@@ -1978,7 +1986,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 /* ---- ic ---- */
 /* ============================================================
    Initial Contact Form — schema (data only)
-   window.FORM: storage key, meta, filename (Initials_Date), the
+   window.FORM: storage key, meta, filename ("AZ 9.15.23"), the
    sliding fee scale (+ lookup helpers and the enhance() UI hook),
    and build() → jsPDF doc. Conditional sections appear only when
    relevant; risk / refer-out content renders as flag blocks.
@@ -1986,7 +1994,8 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 REG["ic"] = {
   storageKey: "icc_contact_v1",
   filenameSuffix: "InitialContact",
-  filenameId: "initials",             // clinic convention, e.g. AZ_2026-07-16
+  filenameId: "initials",
+  filenameStyle: "clinic-ic",         // the manual's filing name: "AZ 9.15.23.pdf"
   meta: { nameId: "f_client", dateId: "f_date", roleId: "f_staff" },
 
   // Sliding fee scale — the single source of truth for both the on-screen table and
